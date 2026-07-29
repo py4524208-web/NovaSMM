@@ -8,8 +8,12 @@ import {
   remove
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
+// Check file loaded
+console.log("orders.js loaded");
+
 const ordersRef = ref(db, "orders");
 
+// Add Order
 window.addOrder = function () {
 
     const user = prompt("Customer Name");
@@ -28,37 +32,43 @@ window.addOrder = function () {
 
     set(newRef, {
         orderId: newRef.key,
-        user,
-        service,
-        quantity,
-        price,
+        user: user,
+        service: service,
+        quantity: quantity,
+        price: price,
         status: "Pending"
+    }).then(() => {
+        alert("Order Added Successfully");
+    }).catch((err) => {
+        alert(err.message);
     });
 
 };
 
+// Show Orders
 onValue(ordersRef, (snapshot) => {
 
     const tbody = document.querySelector("#ordersTable tbody");
     tbody.innerHTML = "";
 
+    if (!snapshot.exists()) {
+        return;
+    }
+
     snapshot.forEach((item) => {
 
         const order = item.val();
-order.orderId = order.orderId || item.key;
-order.user = order.user || "Unknown";
-order.price = order.price || "0";
-order.status = order.status || "Pending";
+
         tbody.innerHTML += `
         <tr>
-            <td>${order.orderId}</td>
-            <td>${order.user}</td>
-            <td>${order.service}</td>
-            <td>${order.quantity}</td>
-            <td>${order.price}</td>
-            <td>${order.status}</td>
+            <td>${order.orderId || item.key}</td>
+            <td>${order.user || "-"}</td>
+            <td>${order.service || "-"}</td>
+            <td>${order.quantity || "-"}</td>
+            <td>${order.price || "-"}</td>
+            <td>${order.status || "Pending"}</td>
             <td>
-                <button onclick="deleteOrder('${order.orderId}')">Delete</button>
+                <button onclick="deleteOrder('${item.key}')">Delete</button>
             </td>
         </tr>
         `;
@@ -67,8 +77,19 @@ order.status = order.status || "Pending";
 
 });
 
+// Delete Order
 window.deleteOrder = function(id) {
 
-    remove(ref(db, "orders/" + id));
+    if (confirm("Delete this order?")) {
+
+        remove(ref(db, "orders/" + id))
+        .then(() => {
+            alert("Order Deleted");
+        })
+        .catch((err) => {
+            alert(err.message);
+        });
+
+    }
 
 };
