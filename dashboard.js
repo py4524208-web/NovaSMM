@@ -1,17 +1,22 @@
 import { db } from "./firebase.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-// Orders Count
+function countItems(snapshot) {
+    if (!snapshot.exists()) return 0;
+    return Object.keys(snapshot.val()).length;
+}
+
+// Total Orders
 onValue(ref(db, "orders"), (snapshot) => {
-    document.getElementById("orders").innerText = snapshot.size || 0;
+    document.getElementById("orders").innerText = countItems(snapshot);
 });
 
-// Services Count
+// Total Services
 onValue(ref(db, "services"), (snapshot) => {
-    document.getElementById("services").innerText = snapshot.size || 0;
+    document.getElementById("services").innerText = countItems(snapshot);
 });
 
-// Users Count
+// Total Users
 onValue(ref(db, "users"), (snapshot) => {
-    document.getElementById("users").innerText = snapshot.size || 0;
+    document.getElementById("users").innerText = countItems(snapshot);
 });
