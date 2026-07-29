@@ -45,7 +45,10 @@ onValue(ordersRef, (snapshot) => {
     snapshot.forEach((item) => {
 
         const order = item.val();
-
+order.orderId = order.orderId || item.key;
+order.user = order.user || "Unknown";
+order.price = order.price || "0";
+order.status = order.status || "Pending";
         tbody.innerHTML += `
         <tr>
             <td>${order.orderId}</td>
