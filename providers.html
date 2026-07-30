@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaSMM - Providers</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>🚀 NovaSMM</h2>
+
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="services.html">📦 Services</a>
+<a href="order.html">🛒 Orders</a>
+<a href="users.html">👥 Users</a>
+<a href="wallet.html">💰 Wallet</a>
+<a href="payments.html">💳 Payments</a>
+<a href="providers.html">🔌 Providers</a>
+<a href="tickets.html">🎫 Tickets</a>
+<a href="reports.html">📊 Reports</a>
+<a href="settings.html">⚙️ Settings</a>
+</div>
+
+<div class="main-content">
+
+<h1>🔌 Providers Management</h1>
+
+<input type="text" id="providerName" placeholder="Provider Name">
+
+<input type="text" id="providerApi" placeholder="API URL">
+
+<button onclick="addProvider()">➕ Add Provider</button>
+
+<table id="providerTable">
+<tr>
+<th>Provider</th>
+<th>API URL</th>
+<th>Action</th>
+</tr>
+</table>
+
+</div>
+
+<script src="providers.js"></script>
+
+</body>
+</html>
