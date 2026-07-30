@@ -55,8 +55,22 @@ window.addOrder = function () {
   const user = prompt("Customer Name");
   if (!user) return;
 
-  const service = prompt("Service Name");
-  if (!service) return;
+  const serviceNames = services.map(s => s.name).join("\n");
+
+const service = prompt(
+  "Select Service (Type exactly as shown):\n\n" + serviceNames
+);
+
+if (!service) return;
+
+const selectedService = services.find(
+  s => s.name.toLowerCase() === service.toLowerCase()
+);
+
+if (!selectedService) {
+  alert("Service not found!");
+  return;
+}
 
   const quantity = prompt("Quantity");
   if (!quantity) return;
@@ -71,7 +85,7 @@ window.addOrder = function () {
     user: user,
     service: service,
     quantity: Number(quantity),
-    price: Number(price),
+    price: Number(selectedService.price),
     status: "Pending",
     createdAt: new Date().toLocaleString()
   });
