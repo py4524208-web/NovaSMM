@@ -8,9 +8,48 @@ import {
   remove,
   update
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+// =======================
+// Firebase References
+// =======================
 
+const usersRef = ref(db, "users");
+const servicesRef = ref(db, "services");
 const ordersRef = ref(db, "orders");
+
+let users = [];
+let services = [];
 let orders = [];
+// Load Users
+onValue(usersRef, (snapshot) => {
+
+  users = [];
+
+  if (snapshot.exists()) {
+    snapshot.forEach((item) => {
+      users.push({
+        id: item.key,
+        ...item.val()
+      });
+    });
+  }
+
+});
+
+// Load Services
+onValue(servicesRef, (snapshot) => {
+
+  services = [];
+
+  if (snapshot.exists()) {
+    snapshot.forEach((item) => {
+      services.push({
+        id: item.key,
+        ...item.val()
+      });
+    });
+  }
+
+});
 window.addOrder = function () {
 
   const user = prompt("Customer Name");
