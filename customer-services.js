@@ -91,3 +91,69 @@ Order
 }
 
 console.log("Customer Services Part 1 Loaded");
+// =======================
+// SEARCH SERVICES
+// =======================
+
+const searchBox = document.getElementById("searchBox");
+
+if (searchBox) {
+
+  searchBox.addEventListener("keyup", function () {
+
+    const value = this.value.toLowerCase();
+
+    const rows = document.querySelectorAll("#servicesTable tr");
+
+    rows.forEach((row, index) => {
+
+      if (index === 0) return;
+
+      row.style.display = row.innerText.toLowerCase().includes(value)
+        ? ""
+        : "none";
+
+    });
+
+  });
+
+}
+
+// =======================
+// ORDER SERVICE
+// =======================
+
+window.orderService = function (serviceId) {
+
+  localStorage.setItem("selectedService", serviceId);
+
+  location.href = "customer-order.html";
+
+};
+
+// =======================
+// CATEGORY FILTER
+// =======================
+
+window.filterCategory = function (category) {
+
+  const rows = document.querySelectorAll("#servicesTable tr");
+
+  rows.forEach((row, index) => {
+
+    if (index === 0) return;
+
+    if (
+      category === "All" ||
+      row.cells[0].innerText === category
+    ) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+
+  });
+
+};
+
+console.log("Customer Services Part 2 Loaded");
