@@ -1,4 +1,3 @@
-// Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -13,7 +12,5 @@ const firebaseConfig = {
   measurementId: "G-0JTHRZMQSX"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-window.db = db;
+export const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
