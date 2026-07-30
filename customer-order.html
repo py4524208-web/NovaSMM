@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Place Order - NovaSMM</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="customer-dashboard.html">🏠 Dashboard</a>
+<a href="customer-services.html">📦 Services</a>
+<a href="customer-orders.html">🛒 Orders</a>
+<a href="customer-wallet.html">💰 Wallet</a>
+<a href="#" onclick="customerLogout()">🚪 Logout</a>
+
+</div>
+
+<div class="main-content">
+
+<h1>🛒 Place Order</h1>
+
+<div class="card">
+
+<label>Service</label>
+
+<input type="text" id="serviceName" readonly>
+
+<label>Price (Per 1000)</label>
+
+<input type="text" id="servicePrice" readonly>
+
+<label>Minimum</label>
+
+<input type="text" id="serviceMin" readonly>
+
+<label>Maximum</label>
+
+<input type="text" id="serviceMax" readonly>
+
+<label>Target Link</label>
+
+<input
+type="text"
+id="orderLink"
+placeholder="https://...">
+
+<label>Quantity</label>
+
+<input
+type="number"
+id="orderQuantity"
+placeholder="1000">
+
+<h3>Total : ₹<span id="totalPrice">0</span></h3>
+
+<button id="placeOrderBtn">
+
+🚀 Place Order
+
+</button>
+
+<p id="msg"></p>
+
+</div>
+
+</div>
+
+<script type="module" src="customer-login.js"></script>
+<script type="module" src="customer-order.js"></script>
+
+</body>
+
+</html>
