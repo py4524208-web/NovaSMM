@@ -1,51 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Settings</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="sidebar">
+
 <h2>🚀 NovaSMM</h2>
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
 <a href="providers.html">🔌 Providers</a>
 <a href="tickets.html">🎫 Tickets</a>
 <a href="reports.html">📊 Reports</a>
-<a href="settings.html">⚙️ Settings</a>
+<a href="settings.html" class="active">⚙️ Settings</a>
 
 </div>
 
 <div class="main-content">
 
-<h1>⚙️ Settings</h1>
+<h1>⚙️ NovaSMM Settings</h1>
 
 <div class="card">
 
-<input type="text" id="panelName" placeholder="Panel Name">
+<h2>🌐 Website Settings</h2>
 
-<select id="currency">
-<option>INR ₹</option>
-<option>USD $</option>
-<option>EUR €</option>
+<input
+type="text"
+id="siteName"
+placeholder="Website Name">
+
+<input
+type="text"
+id="siteUrl"
+placeholder="Website URL">
+
+<input
+type="email"
+id="adminEmail"
+placeholder="Admin Email">
+
+<input
+type="text"
+id="supportWhatsapp"
+placeholder="Support WhatsApp">
+
+<button onclick="saveSettings()">
+
+💾 Save Website Settings
+
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>💳 Payment Settings</h2>
+
+<input
+type="text"
+id="upiId"
+placeholder="UPI ID">
+
+<input
+type="text"
+id="merchantName"
+placeholder="Merchant Name">
+
+<input
+type="text"
+id="currency"
+placeholder="Currency (INR)">
+
+<button onclick="savePaymentSettings()">
+
+💰 Save Payment Settings
+
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>🔒 Security</h2>
+
+<input
+type="password"
+id="adminPassword"
+placeholder="New Admin Password">
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm Password">
+
+<button onclick="changePassword()">
+
+🔑 Change Password
+
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>🎨 Panel Settings</h2>
+
+<select id="theme">
+
+<option value="dark">🌙 Dark Theme</option>
+
+<option value="light">☀️ Light Theme</option>
+
 </select>
 
-<button onclick="saveSettings()">💾 Save Settings</button>
+<select id="maintenance">
+
+<option value="off">🟢 Maintenance OFF</option>
+
+<option value="on">🔴 Maintenance ON</option>
+
+</select>
+
+<button onclick="savePanelSettings()">
+
+⚙️ Save Panel Settings
+
+</button>
 
 </div>
 
 </div>
 
-<script src="settings.js"></script>
+<script type="module" src="settings.js"></script>
 
 </body>
+
 </html>
