@@ -2,14 +2,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/fireba
 import { getDatabase } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 export const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  databaseURL: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "...",
-  measurementId: "..."
+  apiKey: "AIzaSyACKYxVzoamyXcczkrkRHV-lQ26DSInHgs",
+  authDomain: "nowasmm.firebaseapp.com",
+  databaseURL: "https://nowasmm-default-rtdb.firebaseio.com",
+  projectId: "nowasmm",
+  storageBucket: "nowasmm.firebasestorage.app",
+  messagingSenderId: "103011223164",
+  appId: "1:103011223164:web:80ed5d53abd26ca5026bf9",
+  measurementId: "G-0JTHRZMQSX"
 };
 
 const app = initializeApp(firebaseConfig);
