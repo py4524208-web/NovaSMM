@@ -5,91 +5,112 @@ import {
   push,
   set,
   onValue,
-  remove
+  remove,
+  update
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-// Check file loaded
-console.log("orders.js loaded");
-
 const ordersRef = ref(db, "orders");
+let orders = [];
 
-// Add Order
-window.addOrder = function () {
+// =======================
+// Load Orders
+// =======================
 
-    const user = prompt("Customer Name");
-    if (!user) return;
-
-    const service = prompt("Service Name");
-    if (!service) return;
-
-    const quantity = prompt("Quantity");
-    if (!quantity) return;
-
-    const price = prompt("Price");
-    if (!price) return;
-
-    const newRef = push(ordersRef);
-
-    set(newRef, {
-        orderId: newRef.key,
-        user: user,
-        service: service,
-        quantity: quantity,
-        price: price,
-        status: "Pending"
-    }).then(() => {
-        alert("Order Added Successfully");
-    }).catch((err) => {
-        alert(err.message);
-    });
-
-};
-
-// Show Orders
 onValue(ordersRef, (snapshot) => {
 
-    const tbody = document.querySelector("#ordersTable tbody");
-    tbody.innerHTML = "";
+  orders = [];
 
-    if (!snapshot.exists()) {
-        return;
-    }
+  if (snapshot.exists()) {
 
     snapshot.forEach((item) => {
 
-        const order = item.val();
-
-        tbody.innerHTML += `
-        <tr>
-            <td>${order.orderId || item.key}</td>
-            <td>${order.user || "-"}</td>
-            <td>${order.service || "-"}</td>
-            <td>${order.quantity || "-"}</td>
-            <td>${order.price || "-"}</td>
-            <td>${order.status || "Pending"}</td>
-            <td>
-                <button onclick="deleteOrder('${item.key}')">Delete</button>
-            </td>
-        </tr>
-        `;
+      orders.push({
+        id: item.key,
+        ...item.val()
+      });
 
     });
 
+  }
+
+  renderOrders();
+
 });
 
-// Delete Order
-window.deleteOrder = function(id) {
+// =======================
+// Render Orders
+// =======================
 
-    if (confirm("Delete this order?")) {
+function renderOrders() {
 
-        remove(ref(db, "orders/" + id))
-        .then(() => {
-            alert("Order Deleted");
-        })
-        .catch((err) => {
-            alert(err.message);
-        });
+  const tbody = document.querySelector("#ordersTable tbody");
 
-    }
+  tbody.innerHTML = "";
+
+  orders.forEach((order) => {
+
+    tbody.innerHTML += `
+    <tr>
+
+      <td>${order.orderId || order.id}</td>
+
+      <td>${order.user}</td>
+
+      <td>${order.service}</td>
+
+      <td>${order.quantity}</td>
+
+      <td>₹${order.price}</td>
+
+      <td>
+
+      <select onchange="changeStatus('${order.id}',this.value)">
+
+      <option value="Pending" ${order.status=="Pending"?"selected":""}>Pending</option>
+
+      <option value="Processing" ${order.status=="Processing"?"selected":""}>Processing</option>
+
+      <option value="Completed" ${order.status=="Completed"?"selected":""}>Completed</option>
+
+      <option value="Cancelled" ${order.status=="Cancelled"?"selected":""}>Cancelled</option>
+
+      </select>
+
+      </td>
+
+      <td>
+
+      <button onclick="editOrder('${order.id}')">✏️</button>
+
+      <button onclick="deleteOrder('${order.id}')">🗑</button>
+
+      </td>
+
+    </tr>
+    `;
+
+  });
+
+}
+
+// =======================
+// Search
+// =======================
+
+window.searchOrder = function () {
+
+  const key = document
+    .getElementById("searchOrder")
+    .value
+    .toLowerCase();
+
+  document.querySelectorAll("#ordersTable tbody tr").forEach(row => {
+
+    row.style.display =
+      row.innerText.toLowerCase().includes(key)
+        ? ""
+        : "none";
+
+  });
 
 };
