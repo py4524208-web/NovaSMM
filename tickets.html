@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaSMM - Tickets</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="services.html">📦 Services</a>
+<a href="order.html">🛒 Orders</a>
+<a href="users.html">👥 Users</a>
+<a href="wallet.html">💰 Wallet</a>
+<a href="payments.html">💳 Payments</a>
+<a href="providers.html">🔌 Providers</a>
+<a href="tickets.html">🎫 Tickets</a>
+<a href="reports.html">📊 Reports</a>
+<a href="settings.html">⚙️ Settings</a>
+
+</div>
+
+<div class="main-content">
+
+<h1>🎫 Tickets Management</h1>
+
+<input type="text" id="ticketUser" placeholder="User Name">
+
+<input type="text" id="ticketSubject" placeholder="Subject">
+
+<select id="ticketStatus">
+<option value="Open">🟢 Open</option>
+<option value="Pending">🟡 Pending</option>
+<option value="Closed">🔴 Closed</option>
+</select>
+
+<button onclick="addTicket()">➕ Add Ticket</button>
+
+<table id="ticketTable">
+
+<tr>
+<th>User</th>
+<th>Subject</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</table>
+
+</div>
+
+<script src="tickets.js"></script>
+
+</body>
+</html>
