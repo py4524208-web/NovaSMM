@@ -1,56 +1,73 @@
-let providers = JSON.parse(localStorage.getItem("providers")) || [];
+import { ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+import { db } from "./firebase.js";
 
-function saveProviders() {
-    localStorage.setItem("providers", JSON.stringify(providers));
-}
+const providerRef = ref(db, "providers");
 
 function loadProviders() {
-    const table = document.getElementById("providerTable");
+    onValue(providerRef, (snapshot) => {
 
-    table.innerHTML = `
-    <tr>
-        <th>Provider</th>
-        <th>API URL</th>
-        <th>Action</th>
-    </tr>`;
+        const table = document.getElementById("providerTable");
 
-    providers.forEach((item, index) => {
-        table.innerHTML += `
+        table.innerHTML = `
         <tr>
-            <td>${item.name}</td>
-            <td>${item.api}</td>
-            <td>
-                <button onclick="deleteProvider(${index})">🗑 Delete</button>
-            </td>
+            <th>Name</th>
+            <th>API URL</th>
+            <th>API Key</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>`;
+
+        snapshot.forEach((child) => {
+
+            const data = child.val();
+
+            table.innerHTML += `
+            <tr>
+                <td>${data.name}</td>
+                <td>${data.api}</td>
+                <td>${data.key}</td>
+                <td>${data.status}</td>
+                <td>
+                    <button onclick="deleteProvider('${child.key}')">
+                    Delete
+                    </button>
+                </td>
+            </tr>`;
+        });
+
     });
 }
 
-function addProvider() {
+window.addProvider = function () {
+
     const name = document.getElementById("providerName").value;
     const api = document.getElementById("providerApi").value;
+    const key = document.getElementById("providerKey").value;
+    const status = document.getElementById("providerStatus").value;
 
-    if (name === "" || api === "") {
+    if (!name || !api || !key) {
         alert("Fill all fields");
         return;
     }
 
-    providers.push({
-        name: name,
-        api: api
-    });
+    const newRef = push(providerRef);
 
-    saveProviders();
-    loadProviders();
+    set(newRef, {
+        name,
+        api,
+        key,
+        status
+    });
 
     document.getElementById("providerName").value = "";
     document.getElementById("providerApi").value = "";
-}
+    document.getElementById("providerKey").value = "";
+};
 
-function deleteProvider(index) {
-    providers.splice(index, 1);
-    saveProviders();
-    loadProviders();
-}
+window.deleteProvider = function(id) {
+
+    remove(ref(db, "providers/" + id));
+
+};
 
 loadProviders();
