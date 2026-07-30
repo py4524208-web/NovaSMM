@@ -1,4 +1,3 @@
-
 import { db } from "./firebase.js";
 
 import {
@@ -9,9 +8,6 @@ onValue,
 remove,
 update
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
-// =======================
-// Firebase References
-// =======================
 
 const usersRef = ref(db, "users");
 const servicesRef = ref(db, "services");
@@ -20,41 +16,60 @@ const ordersRef = ref(db, "orders");
 let users = [];
 let services = [];
 let orders = [];
-// Load Users
+let editId = null;
+
+// =======================
+// LOAD USERS
+// =======================
+
 onValue(usersRef, (snapshot) => {
 
 users = [];
 
 if (snapshot.exists()) {
-snapshot.forEach((item) => {
+
+snapshot.forEach((child) => {
+
 users.push({
-id: item.key,
-...item.val()
+id: child.key,
+...child.val()
 });
+
 });
+
 }
 
+loadUsers();
+
 });
 
-// Load Services
+// =======================
+// LOAD SERVICES
+// =======================
+
 onValue(servicesRef, (snapshot) => {
 
 services = [];
 
 if (snapshot.exists()) {
-snapshot.forEach((item) => {
+
+snapshot.forEach((child) => {
+
 services.push({
-id: item.key,
-...item.val()
+id: child.key,
+...child.val()
 });
+
 });
+
 }
 
+loadServices();
+
 });
 
-
 // =======================
-// Load Orders
+// LOAD ORDERS
 // =======================
 
 onValue(ordersRef, (snapshot) => {
@@ -63,12 +78,12 @@ orders = [];
 
 if (snapshot.exists()) {
 
-snapshot.forEach((item) => {  
+snapshot.forEach((child) => {
 
-  orders.push({  
-    id: item.key,  
-    ...item.val()  
-  });  
+orders.push({
+id: child.key,
+...child.val()
+});
 
 });
 
@@ -79,55 +94,23 @@ renderOrders();
 });
 
 // =======================
-// Render Orders
+// LOAD USER DROPDOWN
 // =======================
 
-function renderOrders() {
+function loadUsers() {
 
-const tbody = document.querySelector("#ordersTable tbody");
+const select = document.getElementById("orderUser");
 
-tbody.innerHTML = "";
+select.innerHTML = `
+<option value="">Select User</option>
+`;
 
-orders.forEach((order) => {
+users.forEach(user => {
 
-tbody.innerHTML += `  
-<tr>  
-
-  <td>${order.orderId || order.id}</td>  
-
-  <td>${order.user}</td>  
-
-  <td>${order.service}</td>  
-
-  <td>${order.quantity}</td>  
-
-  <td>₹${order.price}</td>  
-
-  <td>  
-
-  <select onchange="changeStatus('${order.id}',this.value)">  
-
-  <option value="Pending" ${order.status=="Pending"?"selected":""}>Pending</option>  
-
-  <option value="Processing" ${order.status=="Processing"?"selected":""}>Processing</option>  
-
-  <option value="Completed" ${order.status=="Completed"?"selected":""}>Completed</option>  
-
-  <option value="Cancelled" ${order.status=="Cancelled"?"selected":""}>Cancelled</option>  
-
-  </select>  
-
-  </td>  
-
-  <td>  
-
-  <button onclick="editOrder('${order.id}')">✏️</button>  
-
-  <button onclick="deleteOrder('${order.id}')">🗑</button>  
-
-  </td>  
-
-</tr>  
+select.innerHTML += `
+<option value="${user.name}">
+${user.name}
+</option>
 `;
 
 });
@@ -135,7 +118,259 @@ tbody.innerHTML += `
 }
 
 // =======================
-// Search
+// LOAD SERVICE DROPDOWN
+// =======================
+
+function loadServices() {
+
+const select = document.getElementById("orderService");
+
+select.innerHTML = `
+<option value="">Select Service</option>
+`;
+
+services.forEach(service => {
+
+select.innerHTML += `
+<option value="${service.id}">
+${service.name}
+</option>
+`;
+
+});
+
+select.onchange = function () {
+
+const item = services.find(x => x.id == this.value);
+
+document.getElementById("orderPrice").value =
+item ? item.price : "";
+
+};
+
+}
+
+// =======================
+// RENDER ORDERS
+// =======================
+
+function renderOrders() {
+
+const table = document.getElementById("ordersTable");
+
+table.innerHTML = `
+
+<tr>
+
+<th>Order ID</th>
+
+<th>User</th>
+
+<th>Service</th>
+
+<th>Qty</th>
+
+<th>Price</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+`;
+
+orders.forEach(item => {
+
+table.innerHTML += `
+
+<tr>
+
+<td>${item.orderId}</td>
+
+<td>${item.user}</td>
+
+<td>${item.service}</td>
+
+<td>${item.quantity}</td>
+
+<td>₹${item.price}</td>
+
+<td>${item.status}</td>
+
+<td>
+
+<button onclick="editOrder('${item.id}')">
+
+Edit
+
+</button>
+
+<button onclick="deleteOrder('${item.id}')">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+// =======================
+// SAVE ORDER
+// =======================
+
+window.saveOrder = function () {
+
+const user = document.getElementById("orderUser").value;
+const serviceId = document.getElementById("orderService").value;
+const quantity = document.getElementById("orderQuantity").value;
+const status = document.getElementById("orderStatus").value;
+
+if (!user || !serviceId || !quantity) {
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+const service = services.find(x => x.id === serviceId);
+
+if (!service) {
+
+alert("Service not found");
+
+return;
+
+}
+
+// =======================
+// UPDATE
+// =======================
+
+if (editId) {
+
+update(ref(db, "orders/" + editId), {
+
+user,
+service: service.name,
+quantity: Number(quantity),
+price: Number(service.price),
+status
+
+});
+
+editId = null;
+
+document.querySelector("button[onclick='saveOrder()']").innerText =
+"➕ Save Order";
+
+}
+
+// =======================
+// ADD
+// =======================
+
+else {
+
+const newRef = push(ordersRef);
+
+set(newRef, {
+
+orderId: "ORD" + Date.now(),
+
+user,
+
+service: service.name,
+
+quantity: Number(quantity),
+
+price: Number(service.price),
+
+status,
+
+createdAt: new Date().toLocaleString()
+
+});
+
+}
+
+clearForm();
+
+};
+
+// =======================
+// CLEAR FORM
+// =======================
+
+function clearForm() {
+
+document.getElementById("orderUser").value = "";
+
+document.getElementById("orderService").value = "";
+
+document.getElementById("orderQuantity").value = "";
+
+document.getElementById("orderPrice").value = "";
+
+document.getElementById("orderStatus").value = "Pending";
+
+}
+
+// =======================
+// EDIT ORDER
+// =======================
+
+window.editOrder = function (id) {
+
+const item = orders.find(x => x.id === id);
+
+if (!item) return;
+
+editId = id;
+
+document.getElementById("orderUser").value = item.user;
+
+const service = services.find(s => s.name === item.service);
+
+if (service) {
+
+document.getElementById("orderService").value = service.id;
+
+}
+
+document.getElementById("orderQuantity").value = item.quantity;
+
+document.getElementById("orderPrice").value = item.price;
+
+document.getElementById("orderStatus").value = item.status;
+
+document.querySelector("button[onclick='saveOrder()']").innerText =
+"💾 Update Order";
+
+};
+
+// =======================
+// DELETE ORDER
+// =======================
+
+window.deleteOrder = function (id) {
+
+if (confirm("Delete this order?")) {
+
+remove(ref(db, "orders/" + id));
+
+}
+
+};
+// =======================
+// SEARCH ORDER
 // =======================
 
 window.searchOrder = function () {
@@ -145,141 +380,84 @@ const key = document
 .value
 .toLowerCase();
 
-document.querySelectorAll("#ordersTable tbody tr").forEach(row => {
+document.querySelectorAll("#ordersTable tr").forEach((row, index) => {
 
-row.style.display =  
-  row.innerText.toLowerCase().includes(key)  
-    ? ""  
-    : "none";
+if (index === 0) return;
+
+row.style.display = row.innerText.toLowerCase().includes(key)
+? ""
+: "none";
 
 });
 
 };
-window.editOrder = function(id){
 
-const order = orders.find(x => x.id === id);  
+// =======================
+// CHANGE STATUS
+// =======================
 
-const user = prompt("User", order.user);  
-if(user === null) return;  
+window.changeStatus = function (id, status) {
 
-const service = prompt("Service", order.service);  
-if(service === null) return;  
-
-const quantity = prompt("Quantity", order.quantity);  
-if(quantity === null) return;  
-
-const price = prompt("Price", order.price);  
-if(price === null) return;  
-
-update(ref(db,"orders/"+id),{  
-    user,  
-    service,  
-    quantity,  
-    price  
+update(ref(db, "orders/" + id), {
+status
 });
 
 };
 
-window.deleteOrder = function(id){
+// =======================
+// COPY ORDER ID
+// =======================
 
-if(confirm("Delete this order?")){  
-    remove(ref(db,"orders/"+id));  
+window.copyOrderId = function (id) {
+
+navigator.clipboard.writeText(id);
+
+alert("Order ID Copied");
+
+};
+
+// =======================
+// CANCEL EDIT
+// =======================
+
+window.cancelEdit = function () {
+
+editId = null;
+
+clearForm();
+
+const btn = document.querySelector("button[onclick='saveOrder()']");
+
+if (btn) {
+btn.innerText = "➕ Save Order";
 }
 
 };
 
-window.changeStatus = function(id,status){
+// =======================
+// VALIDATION
+// =======================
 
-update(ref(db,"orders/"+id),{  
-    status  
+document.addEventListener("DOMContentLoaded", () => {
+
+const qty = document.getElementById("orderQuantity");
+
+if (qty) {
+
+qty.addEventListener("input", () => {
+
+if (Number(qty.value) < 1) {
+qty.value = 1;
+}
+
 });
-
-};
-
-// =======================
-// Order Form
-// =======================
-
-window.openOrderForm = function () {
-
-loadOrderForm();
-
-document.getElementById("orderForm").style.display = "block";
-
-};
-
-window.closeOrderForm = function () {
-
-document.getElementById("orderForm").style.display = "none";
-
-};
-
-// =======================
-// Load Form Data
-// =======================
-
-function loadOrderForm() {
-
-  const userSelect = document.getElementById("orderUser");
-  const serviceSelect = document.getElementById("orderService");
-
-  if (!userSelect || !serviceSelect) return;
-
-  userSelect.innerHTML = '<option value="">Select User</option>';
-
-  users.forEach(user => {
-    userSelect.innerHTML += `
-      <option value="${user.name}">${user.name}</option>
-    `;
-  });
-
-  serviceSelect.innerHTML = '<option value="">Select Service</option>';
-
-  services.forEach(service => {
-    serviceSelect.innerHTML += `
-      <option value="${service.id}">${service.name}</option>
-    `;
-  });
-
-  serviceSelect.onchange = function () {
-    const service = services.find(s => s.id === this.value);
-
-    document.getElementById("orderPrice").value =
-      service ? service.price : "";
-  };
 
 }
 
+});
 
+// =======================
+// CONSOLE
+// =======================
 
-window.saveOrder = function () {
-
-  const user = document.getElementById("orderUser").value;
-  const serviceId = document.getElementById("orderService").value;
-  const quantity = document.getElementById("orderQuantity").value;
-
-  if (!user || !serviceId || !quantity) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  const service = services.find(s => s.id === serviceId);
-
-  const newRef = push(ordersRef);
-
-  set(newRef, {
-    orderId: "ORD" + Date.now(),
-    user: user,
-    service: service.name,
-    quantity: Number(quantity),
-    price: Number(service.price),
-    status: "Pending",
-    createdAt: new Date().toLocaleString()
-  });
-
-  closeOrderForm();
-
-  document.getElementById("orderQuantity").value = "";
-  document.getElementById("orderPrice").value = "";
-
-};
+console.log("✅ NovaSMM Orders Module Loaded");
