@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyACKYxVzoamyXcczkrkRHV-lQ26DSInHgs",
   authDomain: "nowasmm.firebaseapp.com",
   databaseURL: "https://nowasmm-default-rtdb.firebaseio.com",
@@ -13,6 +14,8 @@ export const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 
-export { app, db };
+const db = getDatabase(app);
+const auth = getAuth(app);
+
+export { app, db, auth };
