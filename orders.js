@@ -196,24 +196,38 @@ table.innerHTML += `
 
 <td>₹${item.price}</td>
 
-<td>${item.status}</td>
+<td>
+<select onchange="changeStatus('${item.id}',this.value)">
+<option value="Pending" ${item.status=="Pending"?"selected":""}>Pending</option>
+<option value="Processing" ${item.status=="Processing"?"selected":""}>Processing</option>
+<option value="Completed" ${item.status=="Completed"?"selected":""}>Completed</option>
+<option value="Cancelled" ${item.status=="Cancelled"?"selected":""}>Cancelled</option>
+</select>
+
+<td>
+<select onchange="changeStatus('${item.id}',this.value)">
+<option value="Pending" ${item.status=="Pending"?"selected":""}>Pending</option>
+<option value="Processing" ${item.status=="Processing"?"selected":""}>Processing</option>
+<option value="Completed" ${item.status=="Completed"?"selected":""}>Completed</option>
+<option value="Cancelled" ${item.status=="Cancelled"?"selected":""}>Cancelled</option>
+</select>
+</td>
 
 <td>
 
+<button onclick="copyOrderId('${item.orderId}')">
+Copy ID
+</button>
+
 <button onclick="editOrder('${item.id}')">
-
 Edit
-
 </button>
 
 <button onclick="deleteOrder('${item.id}')">
-
 Delete
-
 </button>
 
 </td>
-
 </tr>
 
 `;
