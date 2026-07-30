@@ -1,7 +1,5 @@
 import { app } from "./firebase.js";
 
-alert("firebase imported");
-
 import {
   getAuth,
   signInWithEmailAndPassword
@@ -9,27 +7,34 @@ import {
 
 const auth = getAuth(app);
 
-window.login = async function () {
+async function login() {
 
-  alert("Login Start");
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
 
   try {
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    await signInWithEmailAndPassword(auth, email, password);
 
-    const user = await signInWithEmailAndPassword(auth, email, password);
+    alert("Login Successful");
 
-    alert("Success");
+    window.location.href = "dashboard.html";
 
-    location.href = "dashboard.html";
-
-  } catch(e) {
+  } catch (e) {
 
     alert(e.code + "\n" + e.message);
-
     console.log(e);
 
   }
 
 }
+
+window.login = login;
+
+// Login button connect
+document.getElementById("loginBtn").addEventListener("click", login);
