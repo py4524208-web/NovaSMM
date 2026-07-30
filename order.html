@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Orders</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="sidebar">
+
 <h2>🚀 NovaSMM</h2>
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="orders.html">🛒 Orders</a>
+<a href="orders.html" class="active">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
@@ -22,80 +28,87 @@
 <a href="tickets.html">🎫 Tickets</a>
 <a href="reports.html">📊 Reports</a>
 <a href="settings.html">⚙️ Settings</a>
+
 </div>
 
 <div class="main-content">
 
 <h1>🛒 Orders Management</h1>
 
-<div class="top-bar">
-
 <input
 type="text"
 id="searchOrder"
-placeholder="🔍 Search Order"
+placeholder="🔍 Search Order..."
 onkeyup="searchOrder()">
 
-<button onclick="openOrderForm()">
-➕ Add Order
-</button>
+<br><br>
 
-</div>
-<div id="orderForm" style="display:none;background:#1f2937;padding:15px;border-radius:10px;margin-top:15px;">
+<div class="card">
 
-<h3>➕ Add New Order</h3>
+<select id="orderUser">
 
-<select id="orderUser" style="width:100%;margin:8px 0;padding:10px;">
 <option value="">Select User</option>
+
 </select>
 
-<select id="orderService" style="width:100%;margin:8px 0;padding:10px;">
+<select id="orderService">
+
 <option value="">Select Service</option>
+
 </select>
 
 <input
 type="number"
 id="orderQuantity"
-placeholder="Quantity"
-style="width:100%;margin:8px 0;padding:10px;">
+placeholder="Quantity">
 
 <input
 type="text"
 id="orderPrice"
 placeholder="Price"
-readonly
-style="width:100%;margin:8px 0;padding:10px;">
+readonly>
+
+<select id="orderStatus">
+
+<option value="Pending">🟡 Pending</option>
+
+<option value="Processing">🔵 Processing</option>
+
+<option value="Completed">🟢 Completed</option>
+
+<option value="Cancelled">🔴 Cancelled</option>
+
+</select>
 
 <button onclick="saveOrder()">
-💾 Save Order
-</button>
 
-<button onclick="closeOrderForm()">
-❌ Cancel
+➕ Save Order
+
 </button>
 
 </div>
+
 <br>
 
 <table id="ordersTable">
 
-<thead>
-
 <tr>
+
 <th>Order ID</th>
+
 <th>User</th>
+
 <th>Service</th>
+
 <th>Qty</th>
+
 <th>Price</th>
+
 <th>Status</th>
+
 <th>Action</th>
+
 </tr>
-
-</thead>
-
-<tbody>
-
-</tbody>
 
 </table>
 
@@ -104,4 +117,5 @@ style="width:100%;margin:8px 0;padding:10px;">
 <script type="module" src="orders.js"></script>
 
 </body>
+
 </html>
