@@ -3,9 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Providers</title>
 
 <link rel="stylesheet" href="style.css">
+
+<style>
+
+.form-box{
+background:#1f2937;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+.form-box input,
+.form-box select{
+width:100%;
+padding:12px;
+margin:8px 0;
+background:#111827;
+color:#fff;
+border:1px solid #374151;
+border-radius:8px;
+}
+
+.form-box button{
+padding:12px 20px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+font-weight:bold;
+}
+
+.form-box button:hover{
+background:#1d4ed8;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#1f2937;
+border-radius:10px;
+overflow:hidden;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #374151;
+color:white;
+}
+
+th{
+background:#111827;
+}
+
+.action-btn{
+padding:6px 12px;
+margin:2px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.edit-btn{
+background:#f59e0b;
+color:white;
+}
+
+.delete-btn{
+background:#ef4444;
+color:white;
+}
+
+.copy-btn{
+background:#10b981;
+color:white;
+}
+
+.search-box{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+background:#111827;
+border:1px solid #374151;
+border-radius:8px;
+color:white;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -16,7 +107,7 @@
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
@@ -32,46 +123,64 @@
 <h1>🔌 Providers Management</h1>
 
 <input
+id="searchProvider"
+class="search-box"
 type="text"
+placeholder="🔍 Search Provider..."
+onkeyup="searchProvider()">
+
+<div class="form-box">
+
+<input
 id="providerName"
+type="text"
 placeholder="Provider Name">
 
 <input
-type="text"
 id="providerApi"
+type="text"
 placeholder="API URL">
 
 <input
-type="text"
 id="providerKey"
+type="text"
 placeholder="API Key">
 
 <select id="providerStatus">
-<option value="Active">Active</option>
-<option value="Inactive">Inactive</option>
+
+<option value="Active">🟢 Active</option>
+
+<option value="Inactive">🔴 Inactive</option>
+
 </select>
 
 <button onclick="addProvider()">
 ➕ Add Provider
 </button>
 
-<br><br>
+</div>
 
 <table id="providerTable">
 
 <tr>
+
 <th>Name</th>
+
 <th>API URL</th>
+
 <th>API Key</th>
+
 <th>Status</th>
+
 <th>Action</th>
+
 </tr>
 
 </table>
 
 </div>
 
-<script src="providers.js"></script>
+<script type="module" src="providers.js"></script>
 
 </body>
 </html>
