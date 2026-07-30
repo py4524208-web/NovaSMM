@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Payments</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -15,10 +20,10 @@
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
-<a href="payments.html">💳 Payments</a>
+<a href="payments.html" class="active">💳 Payments</a>
 <a href="providers.html">🔌 Providers</a>
 <a href="tickets.html">🎫 Tickets</a>
 <a href="reports.html">📊 Reports</a>
@@ -32,34 +37,86 @@
 
 <input
 type="text"
-id="payUser"
-placeholder="User Name">
-
-<input
-type="number"
-id="payAmount"
-placeholder="Amount">
-
-<select id="payMethod">
-<option value="UPI">UPI</option>
-<option value="Bank">Bank</option>
-<option value="Crypto">Crypto</option>
-<option value="PayPal">PayPal</option>
-</select>
-
-<button onclick="addPayment()">
-💳 Add Payment
-</button>
+id="searchPayment"
+placeholder="🔍 Search Payment..."
+onkeyup="searchPayment()">
 
 <br><br>
 
-<table id="paymentTable">
+<div class="card">
+
+<select id="paymentUser">
+
+<option value="">Select User</option>
+
+</select>
+
+<select id="paymentType">
+
+<option value="Deposit">
+💰 Deposit
+</option>
+
+<option value="Withdraw">
+💸 Withdraw
+</option>
+
+</select>
+
+<input
+type="number"
+id="paymentAmount"
+placeholder="Amount">
+
+<select id="paymentStatus">
+
+<option value="Pending">
+🟡 Pending
+</option>
+
+<option value="Approved">
+🟢 Approved
+</option>
+
+<option value="Rejected">
+🔴 Rejected
+</option>
+
+</select>
+
+<input
+type="text"
+id="paymentRemark"
+placeholder="Remark">
+
+<button onclick="savePayment()">
+
+💾 Save Payment
+
+</button>
+
+</div>
+
+<br>
+
+<table id="paymentsTable">
 
 <tr>
+
+<th>Payment ID</th>
+
 <th>User</th>
+
+<th>Type</th>
+
 <th>Amount</th>
-<th>Method</th>
+
+<th>Status</th>
+
+<th>Remark</th>
+
 <th>Action</th>
+
 </tr>
 
 </table>
@@ -69,4 +126,5 @@ placeholder="Amount">
 <script type="module" src="payments.js"></script>
 
 </body>
+
 </html>
