@@ -5,114 +5,112 @@ import {
   push,
   set,
   onValue,
-  remove
+  remove,
+  update
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 let users = [];
 
+// Add User
 window.addUser = function () {
 
-  const name = document.getElementById("userName").value.trim();
-  const email = document.getElementById("userEmail").value.trim();
-  const balance = document.getElementById("userBalance").value.trim();
+  const name = prompt("User Name");
+  if (!name) return;
 
-  if (!name || !email || !balance) {
-    alert("Please fill all fields");
-    return;
-  }
+  const email = prompt("Email");
+  if (!email) return;
+
+  const balance = prompt("Balance");
+  if (!balance) return;
 
   const newRef = push(ref(db, "users"));
 
   set(newRef, {
-    name: name,
-    email: email,
-    balance: balance,
+    name,
+    email,
+    balance,
     status: "Active"
   });
 
-  document.getElementById("userName").value = "";
-  document.getElementById("userEmail").value = "";
-  document.getElementById("userBalance").value = "";
 };
 
-function renderUsers() {
-
-  const table = document.getElementById("usersTable");
-
-  table.innerHTML = `
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Balance</th>
-    <th>Status</th>
-    <th>Action</th>
-  </tr>
-  `;
-
-  users.forEach((user) => {
-
-    table.innerHTML += `
-    <tr>
-      <td>${user.name}</td>
-      <td>${user.email}</td>
-      <td>₹${user.balance}</td>
-      <td>${user.status}</td>
-      <td>
-        <button onclick="deleteUser('${user.id}')">
-        🗑 Delete
-        </button>
-      </td>
-    </tr>
-    `;
-
-  });
-
-}
-
+// Load Users
 onValue(ref(db, "users"), (snapshot) => {
 
   users = [];
 
-  snapshot.forEach((child) => {
+  if (snapshot.exists()) {
 
-    users.push({
-      id: child.key,
-      ...child.val()
+    snapshot.forEach((child) => {
+
+      users.push({
+        id: child.key,
+        ...child.val()
+      });
+
     });
 
-  });
+  }
 
   renderUsers();
 
 });
 
-window.deleteUser = function (id) {
+// Render Users
+function renderUsers() {
 
-  if (confirm("Delete User?")) {
+  const tbody = document.querySelector("#usersTable tbody");
 
-    remove(ref(db, "users/" + id));
+  tbody.innerHTML = "";
 
-  }
+  users.forEach((user) => {
 
-};
+    tbody.innerHTML += `
 
-window.searchUser = function () {
+<tr>
 
-  const keyword = document
-    .getElementById("searchUser")
-    .value
-    .toLowerCase();
+<td>${user.id}</td>
 
-  const rows = document.querySelectorAll("#usersTable tr");
+<td>${user.name}</td>
 
-  rows.forEach((row, index) => {
+<td>${user.email}</td>
 
-    if (index === 0) return;
+<td>₹${user.balance}</td>
 
-    row.style.display = row.innerText.toLowerCase().includes(keyword)
-      ? ""
-      : "none";
+<td>
+
+<select onchange="changeStatus('${user.id}',this.value)">
+
+<option value="Active"
+${user.status=="Active"?"selected":""}>
+Active
+</option>
+
+<option value="Banned"
+${user.status=="Banned"?"selected":""}>
+Banned
+</option>
+
+</select>
+
+</td>
+
+<td>
+
+<button onclick="editUser('${user.id}')">
+✏️
+</button>
+
+<button onclick="deleteUser('${user.id}')">
+🗑️
+</button>
+
+</td>
+
+</tr>
+
+`;
 
   });
 
-};
+}
