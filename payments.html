@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaSMM - Payments</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="services.html">📦 Services</a>
+<a href="order.html">🛒 Orders</a>
+<a href="users.html">👥 Users</a>
+<a href="wallet.html">💰 Wallet</a>
+<a href="payments.html">💳 Payments</a>
+<a href="providers.html">🔌 Providers</a>
+<a href="tickets.html">🎫 Tickets</a>
+<a href="reports.html">📊 Reports</a>
+<a href="settings.html">⚙️ Settings</a>
+
+</div>
+
+<div class="main-content">
+
+<h1>💳 Payments Management</h1>
+
+<input
+type="text"
+id="payUser"
+placeholder="User Name">
+
+<input
+type="number"
+id="payAmount"
+placeholder="Amount">
+
+<select id="payMethod">
+<option value="UPI">UPI</option>
+<option value="Bank">Bank</option>
+<option value="Crypto">Crypto</option>
+<option value="PayPal">PayPal</option>
+</select>
+
+<button onclick="addPayment()">
+💳 Add Payment
+</button>
+
+<br><br>
+
+<table id="paymentTable">
+
+<tr>
+<th>User</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Action</th>
+</tr>
+
+</table>
+
+</div>
+
+<script type="module" src="payments.js"></script>
+
+</body>
+</html>
