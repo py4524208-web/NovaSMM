@@ -5,9 +5,11 @@ import {
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
+alert("login.js loaded");
+
 const auth = getAuth(app);
 
-window.login = function () {
+window.login = async function () {
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -17,13 +19,28 @@ window.login = function () {
     return;
   }
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Login Successful");
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      alert(error.code + "\n" + error.message);
-    });
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    console.log(userCredential.user);
+
+    alert("✅ Login Successful");
+
+    window.location.href = "./dashboard.html";
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Error Code: " + error.code +
+      "\n\nMessage: " + error.message
+    );
+
+  }
 
 };
