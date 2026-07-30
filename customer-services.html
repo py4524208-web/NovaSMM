@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NovaSMM Services</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="customer-dashboard.html">🏠 Dashboard</a>
+
+<a href="customer-services.html" class="active">📦 Services</a>
+
+<a href="customer-orders.html">🛒 Orders</a>
+
+<a href="customer-wallet.html">💰 Wallet</a>
+
+<a href="customer-tickets.html">🎫 Tickets</a>
+
+<a href="#" onclick="customerLogout()">🚪 Logout</a>
+
+</div>
+
+<div class="main-content">
+
+<h1>📦 Available Services</h1>
+
+<input
+type="text"
+id="searchBox"
+placeholder="Search Service...">
+
+<br><br>
+
+<table id="servicesTable">
+
+<tr>
+
+<th>Category</th>
+
+<th>Service</th>
+
+<th>Rate</th>
+
+<th>Min</th>
+
+<th>Max</th>
+
+<th>Action</th>
+
+</tr>
+
+</table>
+
+</div>
+
+<script type="module" src="customer-login.js"></script>
+
+<script type="module" src="customer-services.js"></script>
+
+</body>
+
+</html>
