@@ -204,3 +204,88 @@ row.innerText.toLowerCase().includes(key)
 };
 
 console.log("Provider API Part 2 Loaded");
+// =======================
+// GLOBAL MARKUP SETTINGS
+// =======================
+
+let globalMarkupType = "percent"; // percent | fixed
+let globalMarkupValue = 20;
+
+// =======================
+// CALCULATE SELL PRICE
+// =======================
+
+window.calculateSellPrice = function(providerPrice){
+
+providerPrice = Number(providerPrice);
+
+if(globalMarkupType==="percent"){
+
+return (
+providerPrice +
+(providerPrice*globalMarkupValue/100)
+).toFixed(4);
+
+}
+
+return (
+providerPrice +
+globalMarkupValue
+).toFixed(4);
+
+};
+
+// =======================
+// SELECT CHEAPEST PROVIDER
+// =======================
+
+window.getCheapestProvider=function(services){
+
+if(!services || services.length===0) return null;
+
+services.sort((a,b)=>
+
+Number(a.rate)-Number(b.rate)
+
+);
+
+return services[0];
+
+};
+
+// =======================
+// FUTURE API IMPORT
+// =======================
+
+window.importProviderServices=function(data){
+
+console.log("Provider Services Ready");
+
+console.log(data);
+
+// Future:
+// Save services to Firebase
+// Apply Markup
+// Compare Providers
+// Auto Update Services
+
+};
+
+// =======================
+// AUTO ORDER ROUTER
+// =======================
+
+window.sendOrderToProvider=function(order){
+
+console.log("Routing Order");
+
+console.log(order);
+
+// Future:
+// Auto Select Cheapest Provider
+// Send API Request
+// Save Provider Order ID
+
+};
+
+console.log("Provider API Part 3 Loaded");
