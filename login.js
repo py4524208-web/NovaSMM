@@ -1,171 +1,65 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import {
-getAuth,
-signInWithEmailAndPassword,
-onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import { firebaseConfig } from "./firebase.js";
 
-// =======================
-// FIREBASE INIT
-// =======================
-
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
 
-// =======================
-// CHECK LOGIN
-// =======================
+const page = location.pathname.split("/").pop();
 
-onAuthStateChanged(auth, (user) => {
+// Login page
+if (page === "login.html" || page === "index.html") {
 
-if (user) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      location.href = "dashboard.html";
+    }
+  });
 
-window.location.href = "dashboard.html";
+  const btn = document.getElementById("loginBtn");
 
-}
+  if (btn) {
+    btn.addEventListener("click", async () => {
 
-});
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("msg");
 
-// =======================
-// LOGIN
-// =======================
+      msg.innerHTML = "";
 
-window.login = function () {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        location.href = "dashboard.html";
+      } catch (e) {
+        msg.innerHTML = e.message;
+      }
 
-const email = document.getElementById("email").value.trim();
-
-const password = document.getElementById("password").value;
-
-const remember = document.getElementById("remember").checked;
-
-const error = document.getElementById("loginError");
-
-error.innerText = "";
-
-if (!email || !password) {
-
-error.innerText = "Please enter email and password.";
-
-return;
+    });
+  }
 
 }
 
-signInWithEmailAndPassword(auth, email, password)
+// Protect Admin Pages
+else {
 
-.then((userCredential) => {
-
-const user = userCredential.user;
-
-if (remember) {
-
-localStorage.setItem("rememberLogin", "true");
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      location.href = "login.html";
+    }
+  });
 
 }
 
-sessionStorage.setItem("adminLogin", "true");
-
-window.location.href = "dashboard.html";
-
-})
-
-.catch((err) => {
-
-error.innerText = err.message;
-
-});
-
-};
-// =======================
-// LOGOUT
-// =======================
-
+// Logout
 window.logout = async function () {
-
-try {
-
-await auth.signOut();
-
-localStorage.removeItem("rememberLogin");
-sessionStorage.removeItem("adminLogin");
-
-window.location.href = "login.html";
-
-} catch (e) {
-
-alert("Logout Failed");
-
-}
-
+  await signOut(auth);
+  location.href = "login.html";
 };
 
-// =======================
-// PROTECT ADMIN PAGES
-// =======================
-
-const currentPage = window.location.pathname.split("/").pop();
-
-const publicPages = [
-"login.html",
-"index.html"
-];
-
-if (!publicPages.includes(currentPage)) {
-
-onAuthStateChanged(auth, (user) => {
-
-if (!user) {
-
-window.location.href = "login.html";
-
-}
-
-});
-
-}
-
-// =======================
-// SESSION CHECK
-// =======================
-
-if (
-!localStorage.getItem("rememberLogin") &&
-!sessionStorage.getItem("adminLogin")
-) {
-
-if (!publicPages.includes(currentPage)) {
-
-window.location.href = "login.html";
-
-}
-
-}
-
-// =======================
-// ENTER KEY LOGIN
-// =======================
-
-document.addEventListener("keydown", function(e){
-
-if(e.key==="Enter"){
-
-const btn=document.querySelector("button");
-
-if(btn){
-
-btn.click();
-
-}
-
-}
-
-});
-
-// =======================
-// CONSOLE
-// =======================
-
-console.log("✅ NovaSMM Login Security Loaded");
+console.log("✅ Login Security Active");
