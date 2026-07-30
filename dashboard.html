@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaSMM Dashboard</title>
+
+<title>NovaSMM Admin Dashboard</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="sidebar">
+
 <h2>🚀 NovaSMM</h2>
 
-<a href="dashboard.html">🏠 Dashboard</a>
+<a href="dashboard.html" class="active">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
-<a href="providers.html">🔌 API Providers</a>
+<a href="providers.html">🔌 Providers</a>
 <a href="tickets.html">🎫 Tickets</a>
 <a href="reports.html">📊 Reports</a>
 <a href="settings.html">⚙️ Settings</a>
@@ -27,33 +33,98 @@
 
 <div class="main-content">
 
-<h1>Welcome Admin 👋</h1>
+<h1>📊 NovaSMM Dashboard</h1>
 
-<div class="cards">
-
-<div class="card">
-<h2>Total Users</h2>
-<h1 id="users">0</h1>
-</div>
+<div class="dashboard-grid">
 
 <div class="card">
-<h2>Total Orders</h2>
-<h1 id="orders">0</h1>
+<h3>👥 Total Users</h3>
+<h2 id="totalUsers">0</h2>
 </div>
 
 <div class="card">
-<h2>Total Services</h2>
-<h1 id="services">0</h1>
+<h3>📦 Total Services</h3>
+<h2 id="totalServices">0</h2>
 </div>
 
 <div class="card">
-<h2>Total Balance</h2>
-<h1 id="balance">₹0.00</h1>
+<h3>🛒 Total Orders</h3>
+<h2 id="totalOrders">0</h2>
+</div>
+
+<div class="card">
+<h3>💰 Revenue</h3>
+<h2 id="totalRevenue">₹0</h2>
+</div>
+
+<div class="card">
+<h3>👛 Wallet Balance</h3>
+<h2 id="walletBalance">₹0</h2>
+</div>
+
+<div class="card">
+<h3>💳 Pending Payments</h3>
+<h2 id="pendingPayments">0</h2>
 </div>
 
 </div>
 
+<br>
+
+<div class="card">
+
+<h2>🛒 Recent Orders</h2>
+
+<table id="recentOrders">
+
+<tr>
+
+<th>Order ID</th>
+
+<th>User</th>
+
+<th>Service</th>
+
+<th>Status</th>
+
+<th>Amount</th>
+
+</tr>
+
+</table>
+
 </div>
+
+<br>
+
+<div class="card">
+
+<h2>💳 Recent Payments</h2>
+
+<table id="recentPayments">
+
+<tr>
+
+<th>Payment ID</th>
+
+<th>User</th>
+
+<th>Type</th>
+
+<th>Status</th>
+
+<th>Amount</th>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
 <script type="module" src="dashboard.js"></script>
+
 </body>
+
 </html>
