@@ -1,56 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Reports</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="sidebar">
+
 <h2>🚀 NovaSMM</h2>
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
 <a href="providers.html">🔌 Providers</a>
 <a href="tickets.html">🎫 Tickets</a>
-<a href="reports.html">📊 Reports</a>
+<a href="reports.html" class="active">📊 Reports</a>
 <a href="settings.html">⚙️ Settings</a>
+
 </div>
 
 <div class="main-content">
 
-<h1>📊 Reports</h1>
+<h1>📊 Reports & Analytics</h1>
 
-<table id="reportTable">
-<thead>
-<tr>
-<th>Total Users</th>
-<th>Total Orders</th>
-<th>Total Revenue</th>
-<th>Pending</th>
-</tr>
-</thead>
+<input
+type="text"
+id="searchReport"
+placeholder="🔍 Search Report..."
+onkeyup="searchReport()">
 
-<tbody>
+<br><br>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h3>👥 Total Users</h3>
+<h2 id="reportUsers">0</h2>
+</div>
+
+<div class="card">
+<h3>📦 Total Services</h3>
+<h2 id="reportServices">0</h2>
+</div>
+
+<div class="card">
+<h3>🛒 Total Orders</h3>
+<h2 id="reportOrders">0</h2>
+</div>
+
+<div class="card">
+<h3>💳 Total Payments</h3>
+<h2 id="reportPayments">0</h2>
+</div>
+
+<div class="card">
+<h3>💰 Total Revenue</h3>
+<h2 id="reportRevenue">₹0</h2>
+</div>
+
+<div class="card">
+<h3>🎫 Total Tickets</h3>
+<h2 id="reportTickets">0</h2>
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>📋 Recent Activity</h2>
+
+<table id="reportsTable">
+
 <tr>
-<td id="users">0</td>
-<td id="orders">0</td>
-<td id="revenue">₹0</td>
-<td id="pending">0</td>
+
+<th>Type</th>
+
+<th>User</th>
+
+<th>Description</th>
+
+<th>Status</th>
+
+<th>Date</th>
+
 </tr>
-</tbody>
+
 </table>
 
 </div>
 
-<script src="reports.js"></script>
+<br>
+
+<div class="card">
+
+<button onclick="exportCSV()">
+📥 Export CSV
+</button>
+
+<button onclick="printReport()">
+🖨 Print Report
+</button>
+
+<button onclick="refreshReports()">
+🔄 Refresh
+</button>
+
+</div>
+
+</div>
+
+<script type="module" src="reports.js"></script>
 
 </body>
+
 </html>
