@@ -20,3 +20,19 @@ onValue(ref(db, "services"), (snapshot) => {
 onValue(ref(db, "users"), (snapshot) => {
     document.getElementById("users").innerText = countItems(snapshot);
 });
+
+// Total Balance
+onValue(ref(db, "wallet"), (snapshot) => {
+
+    let total = 0;
+
+    if (snapshot.exists()) {
+        snapshot.forEach((child) => {
+            const data = child.val();
+            total += Number(data.balance || 0);
+        });
+    }
+
+    document.getElementById("balance").innerText = "₹" + total.toFixed(2);
+
+});
