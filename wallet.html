@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Wallet</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -15,9 +20,9 @@
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
-<a href="wallet.html">💰 Wallet</a>
+<a href="wallet.html" class="active">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
 <a href="providers.html">🔌 Providers</a>
 <a href="tickets.html">🎫 Tickets</a>
@@ -32,8 +37,19 @@
 
 <input
 type="text"
-id="walletUser"
-placeholder="User Name">
+id="searchWallet"
+placeholder="🔍 Search User..."
+onkeyup="searchWallet()">
+
+<br><br>
+
+<div class="card">
+
+<select id="walletUser">
+
+<option value="">Select User</option>
+
+</select>
 
 <input
 type="number"
@@ -41,22 +57,46 @@ id="walletAmount"
 placeholder="Amount">
 
 <select id="walletType">
-<option value="Add">➕ Add Balance</option>
-<option value="Remove">➖ Remove Balance</option>
+
+<option value="Add">
+➕ Add Balance
+</option>
+
+<option value="Deduct">
+➖ Deduct Balance
+</option>
+
 </select>
 
-<button onclick="updateWallet()">
-💰 Update Wallet
+<input
+type="text"
+id="walletRemark"
+placeholder="Remark">
+
+<button onclick="saveWallet()">
+
+💾 Save
+
 </button>
 
-<br><br>
+</div>
 
-<table id="walletTable" border="1" width="100%">
+<br>
+
+<table id="walletTable">
 
 <tr>
+
 <th>User</th>
+
 <th>Balance</th>
+
+<th>Last Transaction</th>
+
+<th>Remark</th>
+
 <th>Action</th>
+
 </tr>
 
 </table>
@@ -66,4 +106,5 @@ placeholder="Amount">
 <script type="module" src="wallet.js"></script>
 
 </body>
+
 </html>
