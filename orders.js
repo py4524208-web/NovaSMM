@@ -114,68 +114,43 @@ window.searchOrder = function () {
   });
 
 };
-// Edit User
-window.editUser = function(id){
+window.editOrder = function(id){
 
-    const user = users.find(x => x.id === id);
+    const order = orders.find(x => x.id === id);
 
-    const name = prompt("User Name", user.name);
-    if(!name) return;
+    const user = prompt("User", order.user);
+    if(user === null) return;
 
-    const email = prompt("Email", user.email);
-    if(!email) return;
+    const service = prompt("Service", order.service);
+    if(service === null) return;
 
-    const balance = prompt("Balance", user.balance);
-    if(!balance) return;
+    const quantity = prompt("Quantity", order.quantity);
+    if(quantity === null) return;
 
-    update(ref(db,"users/"+id),{
-        name,
-        email,
-        balance
+    const price = prompt("Price", order.price);
+    if(price === null) return;
+
+    update(ref(db,"orders/"+id),{
+        user,
+        service,
+        quantity,
+        price
     });
 
 };
 
-// Delete User
-window.deleteUser = function(id){
+window.deleteOrder = function(id){
 
-    if(confirm("Delete this user?")){
-
-        remove(ref(db,"users/"+id));
-
+    if(confirm("Delete this order?")){
+        remove(ref(db,"orders/"+id));
     }
 
 };
 
-// Ban / Unban
 window.changeStatus = function(id,status){
 
-    update(ref(db,"users/"+id),{
+    update(ref(db,"orders/"+id),{
         status
-    });
-
-};
-
-// Search User
-window.searchUser = function(){
-
-    const keyword =
-    document
-    .getElementById("searchUser")
-    .value
-    .toLowerCase();
-
-    document
-    .querySelectorAll("#usersTable tbody tr")
-    .forEach(row=>{
-
-        row.style.display =
-        row.innerText
-        .toLowerCase()
-        .includes(keyword)
-        ? ""
-        : "none";
-
     });
 
 };
