@@ -1,142 +1,384 @@
 import { db } from "./firebase.js";
 
 import {
-  ref,
-  push,
-  set,
-  onValue,
-  remove,
-  update
+ref,
+push,
+set,
+onValue,
+remove,
+update
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-let services = [];
+const serviceRef = ref(db,"services");
+const providerRef = ref(db,"providers");
 
-// Add Service
-window.addService = function () {
+let services=[];
+let providers=[];
+let editId=null;
 
-  const name = document.getElementById("serviceName").value.trim();
-  const price = document.getElementById("servicePrice").value.trim();
-  const category = document.getElementById("serviceCategory").value;
-  const provider = document.getElementById("providerId").value.trim();
+// ======================
+// LOAD PROVIDERS
+// ======================
 
-  if (!name || !price || !provider) {
-    alert("Please fill all fields");
-    return;
-  }
+onValue(providerRef,(snapshot)=>{
 
-  const newRef = push(ref(db, "services"));
+providers=[];
 
-  set(newRef, {
-    name,
-    price,
-    category,
-    provider,
-    status: "Active"
-  });
+if(snapshot.exists()){
 
-  document.getElementById("serviceName").value = "";
-  document.getElementById("servicePrice").value = "";
-  document.getElementById("providerId").value = "";
+snapshot.forEach((child)=>{
 
-};
-
-// Render Services
-function renderServices() {
-
-  const tbody = document.querySelector("#serviceTable tbody");
-  tbody.innerHTML = "";
-
-  services.forEach((service, index) => {
-
-    tbody.innerHTML += `
-    <tr>
-      <td>${index + 1}</td>
-      <td>${service.name}</td>
-      <td>${service.category}</td>
-      <td>₹${service.price}</td>
-      <td>${service.provider}</td>
-      <td>
-        <button onclick="toggleStatus('${service.id}','${service.status}')">
-          ${service.status}
-        </button>
-      </td>
-      <td>
-        <button onclick="editService('${service.id}')">✏️</button>
-        <button onclick="deleteService('${service.id}')">🗑</button>
-      </td>
-    </tr>
-    `;
-
-  });
-
-}
-
-// Firebase Load
-onValue(ref(db, "services"), (snapshot) => {
-
-  services = [];
-
-  snapshot.forEach((child) => {
-
-    services.push({
-      id: child.key,
-      ...child.val()
-    });
-
-  });
-
-  renderServices();
+providers.push({
+id:child.key,
+...child.val()
+});
 
 });
 
-// Delete
-window.deleteService = function (id) {
+}
 
-  if (confirm("Delete this service?")) {
-    remove(ref(db, "services/" + id));
-  }
+loadProviders();
+
+});
+
+// ======================
+// LOAD SERVICES
+// ======================
+
+onValue(serviceRef,(snapshot)=>{
+
+services=[];
+
+if(snapshot.exists()){
+
+snapshot.forEach((child)=>{
+
+services.push({
+id:child.key,
+...child.val()
+});
+
+});
+
+}
+
+renderServices();
+
+});
+
+// ======================
+// LOAD PROVIDER DROPDOWN
+// ======================
+
+function loadProviders(){
+
+const select=document.getElementById("serviceProvider");
+
+select.innerHTML=`
+<option value="">
+Select Provider
+</option>
+`;
+
+providers.forEach(item=>{
+
+select.innerHTML+=`
+<option value="${item.name}">
+${item.name}
+</option>
+`;
+
+});
+
+}
+
+// ======================
+// RENDER SERVICES
+// ======================
+
+function renderServices(){
+
+const table=document.getElementById("serviceTable");
+
+table.innerHTML=`
+
+<tr>
+
+<th>ID</th>
+
+<th>Service</th>
+
+<th>Price</th>
+
+<th>Min</th>
+
+<th>Max</th>
+
+<th>Provider</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+`;
+
+services.forEach(item=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${item.id}</td>
+
+<td>${item.name}</td>
+
+<td>₹${item.price}</td>
+
+<td>${item.min}</td>
+
+<td>${item.max}</td>
+
+<td>${item.provider}</td>
+
+<td>${item.status}</td>
+
+<td>
+
+<button onclick="editService('${item.id}')">
+
+Edit
+
+</button>
+
+<button onclick="deleteService('${item.id}')">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+// ======================
+// ADD / UPDATE SERVICE
+// ======================
+
+window.addService = function () {
+
+const name = document.getElementById("serviceName").value.trim();
+const price = document.getElementById("servicePrice").value.trim();
+const min = document.getElementById("serviceMin").value.trim();
+const max = document.getElementById("serviceMax").value.trim();
+const provider = document.getElementById("serviceProvider").value;
+const status = document.getElementById("serviceStatus").value;
+
+if (!name || !price || !min || !max || !provider) {
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+// UPDATE
+
+if(editId){
+
+update(ref(db,"services/"+editId),{
+
+name,
+price:Number(price),
+min:Number(min),
+max:Number(max),
+provider,
+status
+
+});
+
+editId=null;
+
+document.querySelector("button[onclick='addService()']").innerText="➕ Add Service";
+
+}
+
+// ADD
+
+else{
+
+const newRef=push(serviceRef);
+
+set(newRef,{
+
+name,
+price:Number(price),
+min:Number(min),
+max:Number(max),
+provider,
+status,
+createdAt:new Date().toLocaleString()
+
+});
+
+}
+
+clearForm();
 
 };
 
-// Edit
-window.editService = function (id) {
+// ======================
+// CLEAR FORM
+// ======================
 
-  const service = services.find(x => x.id === id);
+function clearForm(){
 
-  const name = prompt("Service Name", service.name);
-  if (!name) return;
+document.getElementById("serviceName").value="";
+document.getElementById("servicePrice").value="";
+document.getElementById("serviceMin").value="";
+document.getElementById("serviceMax").value="";
+document.getElementById("serviceProvider").value="";
+document.getElementById("serviceStatus").value="Active";
 
-  const price = prompt("Price", service.price);
-  if (!price) return;
+}
 
-  update(ref(db, "services/" + id), {
-    name,
-    price
-  });
+// ======================
+// EDIT SERVICE
+// ======================
+
+window.editService=function(id){
+
+const item=services.find(x=>x.id===id);
+
+if(!item) return;
+
+editId=id;
+
+document.getElementById("serviceName").value=item.name;
+document.getElementById("servicePrice").value=item.price;
+document.getElementById("serviceMin").value=item.min;
+document.getElementById("serviceMax").value=item.max;
+document.getElementById("serviceProvider").value=item.provider;
+document.getElementById("serviceStatus").value=item.status;
+
+document.querySelector("button[onclick='addService()']").innerText="💾 Update Service";
 
 };
 
-// Status
-window.toggleStatus = function (id, status) {
+// ======================
+// DELETE SERVICE
+// ======================
 
-  update(ref(db, "services/" + id), {
-    status: status === "Active" ? "Inactive" : "Active"
-  });
+window.deleteService=function(id){
+
+if(confirm("Delete this service?")){
+
+remove(ref(db,"services/"+id));
+
+}
 
 };
+// ======================
+// SEARCH SERVICE
+// ======================
 
-// Search
 window.searchService = function () {
 
-  const keyword = document.getElementById("searchService").value.toLowerCase();
+const key = document
+.getElementById("searchService")
+.value
+.toLowerCase();
 
-  document.querySelectorAll("#serviceTable tbody tr").forEach(row => {
+document.querySelectorAll("#serviceTable tr").forEach((row,index)=>{
 
-    row.style.display =
-      row.innerText.toLowerCase().includes(keyword)
-        ? ""
-        : "none";
+if(index===0) return;
 
-  });
+row.style.display = row.innerText.toLowerCase().includes(key)
+? ""
+: "none";
+
+});
 
 };
+
+// ======================
+// CHANGE STATUS
+// ======================
+
+window.changeStatus = function(id,status){
+
+update(ref(db,"services/"+id),{
+
+status
+
+});
+
+};
+
+// ======================
+// COPY SERVICE ID
+// ======================
+
+window.copyServiceId = function(id){
+
+navigator.clipboard.writeText(id);
+
+alert("Service ID Copied");
+
+};
+
+// ======================
+// CANCEL EDIT
+// ======================
+
+window.cancelEdit = function(){
+
+editId=null;
+
+clearForm();
+
+const btn=document.querySelector("button[onclick='addService()']");
+
+if(btn){
+
+btn.innerText="➕ Add Service";
+
+}
+
+};
+
+// ======================
+// FORM VALIDATION
+// ======================
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+const price=document.getElementById("servicePrice");
+
+if(price){
+
+price.addEventListener("input",()=>{
+
+if(Number(price.value)<0){
+
+price.value=0;
+
+}
+
+});
+
+}
+
+});
+
+// ======================
+// CONSOLE
+// ======================
+
+console.log("✅ NovaSMM Services Module Loaded");
