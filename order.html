@@ -1,34 +1,75 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orders - NovaSMM</title>
+<title>NovaSMM - Orders</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>📦 Orders</h1>
+<div class="sidebar">
 
-<button onclick="location.href='dashboard.html'">⬅ Dashboard</button>
-<button onclick="addOrder()">➕ Add Order</button>
+<h2>🚀 NovaSMM</h2>
 
-<table border="1" width="100%" id="ordersTable">
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="services.html">📦 Services</a>
+<a href="order.html">🛒 Orders</a>
+<a href="users.html">👥 Users</a>
+<a href="wallet.html">💰 Wallet</a>
+<a href="payments.html">💳 Payments</a>
+<a href="providers.html">🔌 Providers</a>
+<a href="tickets.html">🎫 Tickets</a>
+<a href="reports.html">📊 Reports</a>
+<a href="settings.html">⚙️ Settings</a>
+
+</div>
+
+<div class="main-content">
+
+<h1>🛒 Orders Management</h1>
+
+<div class="top-bar">
+
+<input
+type="text"
+id="searchOrder"
+placeholder="🔍 Search Order"
+onkeyup="searchOrder()">
+
+<button onclick="addOrder()">
+➕ Add Order
+</button>
+
+</div>
+
+<br>
+
+<table id="ordersTable">
+
 <thead>
+
 <tr>
 <th>Order ID</th>
 <th>User</th>
 <th>Service</th>
-<th>Quantity</th>
+<th>Qty</th>
 <th>Price</th>
 <th>Status</th>
 <th>Action</th>
 </tr>
+
 </thead>
 
-<tbody></tbody>
+<tbody>
+
+</tbody>
 
 </table>
+
+</div>
 
 <script type="module" src="orders.js"></script>
 
