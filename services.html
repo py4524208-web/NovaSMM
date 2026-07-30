@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaSMM - Services</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="sidebar">
+
 <h2>🚀 NovaSMM</h2>
 
 <a href="dashboard.html">🏠 Dashboard</a>
-<a href="services.html">📦 Services</a>
-<a href="order.html">🛒 Orders</a>
+<a href="services.html" class="active">📦 Services</a>
+<a href="orders.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
@@ -22,25 +28,22 @@
 <a href="tickets.html">🎫 Tickets</a>
 <a href="reports.html">📊 Reports</a>
 <a href="settings.html">⚙️ Settings</a>
+
 </div>
 
 <div class="main-content">
 
 <h1>📦 Services Management</h1>
 
-<div class="top-bar">
 <input
 type="text"
 id="searchService"
-placeholder="🔍 Search Service"
+placeholder="🔍 Search Service..."
 onkeyup="searchService()">
 
-<button onclick="addService()">➕ Add Service</button>
-</div>
+<br><br>
 
-<br>
-
-<div class="form-box">
+<div class="card">
 
 <input
 type="text"
@@ -52,40 +55,67 @@ type="number"
 id="servicePrice"
 placeholder="Price">
 
-<select id="serviceCategory">
-<option>Instagram</option>
-<option>Facebook</option>
-<option>YouTube</option>
-<option>Telegram</option>
-<option>TikTok</option>
-<option>Twitter / X</option>
-</select>
+<input
+type="number"
+id="serviceMin"
+placeholder="Minimum">
 
 <input
-type="text"
-id="providerId"
-placeholder="Provider Service ID">
+type="number"
+id="serviceMax"
+placeholder="Maximum">
+
+<select id="serviceProvider">
+
+<option value="">
+Select Provider
+</option>
+
+</select>
+
+<select id="serviceStatus">
+
+<option value="Active">
+🟢 Active
+</option>
+
+<option value="Inactive">
+🔴 Inactive
+</option>
+
+</select>
+
+<button onclick="addService()">
+
+➕ Add Service
+
+</button>
 
 </div>
 
 <br>
 
-<table id="serviceTable" border="1" width="100%">
-<thead>
+<table id="serviceTable">
+
 <tr>
-<th>#</th>
+
+<th>ID</th>
+
 <th>Service</th>
-<th>Category</th>
+
 <th>Price</th>
+
+<th>Min</th>
+
+<th>Max</th>
+
 <th>Provider</th>
+
 <th>Status</th>
+
 <th>Action</th>
+
 </tr>
-</thead>
-
-<tbody>
-
-</tbody>
 
 </table>
 
@@ -94,4 +124,5 @@ placeholder="Provider Service ID">
 <script type="module" src="services.js"></script>
 
 </body>
+
 </html>
