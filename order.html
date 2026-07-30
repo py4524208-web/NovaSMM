@@ -36,12 +36,45 @@ id="searchOrder"
 placeholder="🔍 Search Order"
 onkeyup="searchOrder()">
 
-<button onclick="addOrder()">
+<button onclick="openOrderForm()">
 ➕ Add Order
 </button>
 
 </div>
+<div id="orderForm" style="display:none;background:#1f2937;padding:15px;border-radius:10px;margin-top:15px;">
 
+<h3>➕ Add New Order</h3>
+
+<select id="orderUser" style="width:100%;margin:8px 0;padding:10px;">
+<option value="">Select User</option>
+</select>
+
+<select id="orderService" style="width:100%;margin:8px 0;padding:10px;">
+<option value="">Select Service</option>
+</select>
+
+<input
+type="number"
+id="orderQuantity"
+placeholder="Quantity"
+style="width:100%;margin:8px 0;padding:10px;">
+
+<input
+type="text"
+id="orderPrice"
+placeholder="Price"
+readonly
+style="width:100%;margin:8px 0;padding:10px;">
+
+<button onclick="saveOrder()">
+💾 Save Order
+</button>
+
+<button onclick="closeOrderForm()">
+❌ Cancel
+</button>
+
+</div>
 <br>
 
 <table id="ordersTable">
