@@ -75,8 +75,7 @@ if (!selectedService) {
   const quantity = prompt("Quantity");
   if (!quantity) return;
 
-  const price = prompt("Price");
-  if (!price) return;
+  
 
   const newRef = push(ordersRef);
 
