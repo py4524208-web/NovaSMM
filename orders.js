@@ -11,7 +11,33 @@ import {
 
 const ordersRef = ref(db, "orders");
 let orders = [];
+window.addOrder = function () {
 
+  const user = prompt("Customer Name");
+  if (!user) return;
+
+  const service = prompt("Service Name");
+  if (!service) return;
+
+  const quantity = prompt("Quantity");
+  if (!quantity) return;
+
+  const price = prompt("Price");
+  if (!price) return;
+
+  const newRef = push(ordersRef);
+
+  set(newRef, {
+    orderId: "ORD" + Date.now(),
+    user: user,
+    service: service,
+    quantity: Number(quantity),
+    price: Number(price),
+    status: "Pending",
+    createdAt: new Date().toLocaleString()
+  });
+
+};
 // =======================
 // Load Orders
 // =======================
