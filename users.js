@@ -114,3 +114,61 @@ Banned
   });
 
 }
+// Edit User
+window.editUser = function(id){
+
+    const user = users.find(x => x.id === id);
+
+    const name = prompt("User Name", user.name);
+    if(name === null) return;
+
+    const email = prompt("Email", user.email);
+    if(email === null) return;
+
+    const balance = prompt("Balance", user.balance);
+    if(balance === null) return;
+
+    update(ref(db,"users/"+id),{
+        name,
+        email,
+        balance
+    });
+
+};
+
+// Delete User
+window.deleteUser = function(id){
+
+    if(confirm("Delete this user?")){
+        remove(ref(db,"users/"+id));
+    }
+
+};
+
+// Change Status
+window.changeStatus = function(id,status){
+
+    update(ref(db,"users/"+id),{
+        status
+    });
+
+};
+
+// Search User
+window.searchUser = function(){
+
+    const key = document
+        .getElementById("searchUser")
+        .value
+        .toLowerCase();
+
+    document.querySelectorAll("#usersTable tbody tr").forEach(row=>{
+
+        row.style.display =
+            row.innerText.toLowerCase().includes(key)
+            ? ""
+            : "none";
+
+    });
+
+};
