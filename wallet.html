@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaSMM - Wallet</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="services.html">📦 Services</a>
+<a href="order.html">🛒 Orders</a>
+<a href="users.html">👥 Users</a>
+<a href="wallet.html">💰 Wallet</a>
+<a href="payments.html">💳 Payments</a>
+<a href="providers.html">🔌 Providers</a>
+<a href="tickets.html">🎫 Tickets</a>
+<a href="reports.html">📊 Reports</a>
+<a href="settings.html">⚙️ Settings</a>
+
+</div>
+
+<div class="main-content">
+
+<h1>💰 Wallet Management</h1>
+
+<input
+type="text"
+id="walletUser"
+placeholder="User Name">
+
+<input
+type="number"
+id="walletAmount"
+placeholder="Amount">
+
+<select id="walletType">
+<option value="Add">➕ Add Balance</option>
+<option value="Remove">➖ Remove Balance</option>
+</select>
+
+<button onclick="updateWallet()">
+💰 Update Wallet
+</button>
+
+<br><br>
+
+<table id="walletTable" border="1" width="100%">
+
+<tr>
+<th>User</th>
+<th>Balance</th>
+<th>Action</th>
+</tr>
+
+</table>
+
+</div>
+
+<script type="module" src="wallet.js"></script>
+
+</body>
+</html>
