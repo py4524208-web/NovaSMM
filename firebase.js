@@ -1,6 +1,6 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+// Firebase SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyACKYxVzoamyXcczkrkRHV-lQ26DSInHgs",
@@ -14,8 +14,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
 const db = getDatabase(app);
 
-export { app, auth, db };
+window.db = db;
