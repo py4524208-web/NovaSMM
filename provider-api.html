@@ -1,0 +1,49 @@
+<h2>🔌 Provider API Manager</h2>
+
+<div class="card">
+
+<label>Provider Name</label>
+<input type="text" id="providerName" placeholder="Perfect Panel">
+
+<label>API URL</label>
+<input type="text" id="providerUrl" placeholder="https://provider.com/api/v2">
+
+<label>API Key</label>
+<input type="password" id="providerKey" placeholder="API Key">
+
+<button onclick="saveProvider()">
+💾 Save Provider
+</button>
+
+<button onclick="testConnection()">
+🔗 Test Connection
+</button>
+
+<button onclick="syncServices()">
+🔄 Sync Services
+</button>
+
+<button onclick="checkBalance()">
+💰 Check Balance
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h3>Connected Providers</h3>
+
+<table id="providerApiTable">
+
+<tr>
+<th>Name</th>
+<th>Balance</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</table>
+
+</div>
