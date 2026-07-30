@@ -18,9 +18,7 @@ function loadProviders() {
         </tr>`;
 
         snapshot.forEach((child) => {
-
             const data = child.val();
-
             table.innerHTML += `
             <tr>
                 <td>${data.name}</td>
@@ -28,9 +26,7 @@ function loadProviders() {
                 <td>${data.key}</td>
                 <td>${data.status}</td>
                 <td>
-                    <button onclick="deleteProvider('${child.key}')">
-                    Delete
-                    </button>
+                    <button onclick="deleteProvider('${child.key}')">Delete</button>
                 </td>
             </tr>`;
         });
@@ -39,7 +35,6 @@ function loadProviders() {
 }
 
 window.addProvider = function () {
-
     const name = document.getElementById("providerName").value;
     const api = document.getElementById("providerApi").value;
     const key = document.getElementById("providerKey").value;
@@ -65,9 +60,9 @@ window.addProvider = function () {
 };
 
 window.deleteProvider = function(id) {
-
     remove(ref(db, "providers/" + id));
-
 };
 
 loadProviders();
+
+
