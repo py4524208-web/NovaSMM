@@ -1,31 +1,24 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-import { firebaseConfig } from "./firebase.js";
+import { auth } from "./firebase.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const currentPage = window.location.pathname.split("/").pop();
 
-const page = location.pathname.split("/").pop();
+// =======================
+// LOGIN PAGE
+// =======================
 
-// Login page
-if (page === "login.html" || page === "index.html") {
+if (currentPage === "index.html" || currentPage === "" || currentPage === "login.html") {
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      location.href = "dashboard.html";
-    }
-  });
+  const loginBtn = document.getElementById("loginBtn");
 
-  const btn = document.getElementById("loginBtn");
+  if (loginBtn) {
 
-  if (btn) {
-    btn.addEventListener("click", async () => {
+    loginBtn.addEventListener("click", async () => {
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
@@ -33,33 +26,63 @@ if (page === "login.html" || page === "index.html") {
 
       msg.innerHTML = "";
 
+      if (!email || !password) {
+        msg.innerHTML = "Please enter email and password.";
+        return;
+      }
+
       try {
+
         await signInWithEmailAndPassword(auth, email, password);
+
         location.href = "dashboard.html";
+
       } catch (e) {
-        msg.innerHTML = e.message;
+
+        console.error(e);
+
+        msg.innerHTML = e.code;
+
       }
 
     });
+
   }
 
 }
 
-// Protect Admin Pages
-else {
+// =======================
+// PROTECT ADMIN PAGES
+// =======================
+
+if (
+currentPage !== "index.html" &&
+currentPage !== "" &&
+currentPage !== "login.html"
+) {
 
   onAuthStateChanged(auth, (user) => {
+
     if (!user) {
-      location.href = "login.html";
+
+      location.href = "index.html";
+
     }
+
   });
 
 }
 
-// Logout
+// =======================
+// LOGOUT
+// =======================
+
 window.logout = async function () {
+
   await signOut(auth);
-  location.href = "login.html";
+
+  location.href = "index.html";
+
 };
 
-console.log("✅ Login Security Active");
+console.log("NovaSMM Login Ready");
