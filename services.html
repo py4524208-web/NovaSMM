@@ -10,12 +10,11 @@
 <body>
 
 <div class="sidebar">
-
 <h2>🚀 NovaSMM</h2>
 
 <a href="dashboard.html">🏠 Dashboard</a>
 <a href="services.html">📦 Services</a>
-<a href="orders.html">🛒 Orders</a>
+<a href="order.html">🛒 Orders</a>
 <a href="users.html">👥 Users</a>
 <a href="wallet.html">💰 Wallet</a>
 <a href="payments.html">💳 Payments</a>
@@ -23,20 +22,25 @@
 <a href="tickets.html">🎫 Tickets</a>
 <a href="reports.html">📊 Reports</a>
 <a href="settings.html">⚙️ Settings</a>
-
 </div>
 
 <div class="main-content">
 
 <h1>📦 Services Management</h1>
 
+<div class="top-bar">
 <input
 type="text"
 id="searchService"
 placeholder="🔍 Search Service"
 onkeyup="searchService()">
 
-<br><br>
+<button onclick="addService()">➕ Add Service</button>
+</div>
+
+<br>
+
+<div class="form-box">
 
 <input
 type="text"
@@ -62,22 +66,26 @@ type="text"
 id="providerId"
 placeholder="Provider Service ID">
 
-<button onclick="addService()">
-➕ Add Service
-</button>
+</div>
 
-<br><br>
+<br>
 
 <table id="serviceTable" border="1" width="100%">
-
+<thead>
 <tr>
-<th>Name</th>
+<th>#</th>
+<th>Service</th>
 <th>Category</th>
 <th>Price</th>
 <th>Provider</th>
 <th>Status</th>
 <th>Action</th>
 </tr>
+</thead>
+
+<tbody>
+
+</tbody>
 
 </table>
 
