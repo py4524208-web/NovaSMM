@@ -1,16 +1,31 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { app } from "./firebase.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyACKYxVzoamyXcczkrkRHV-lQ26DSInHgs",
-  authDomain: "nowasmm.firebaseapp.com",
-  databaseURL: "https://nowasmm-default-rtdb.firebaseio.com",
-  projectId: "nowasmm",
-  storageBucket: "nowasmm.firebasestorage.app",
-  messagingSenderId: "103011223164",
-  appId: "1:103011223164:web:80ed5d53abd26ca5026bf9",
-  measurementId: "G-0JTHRZMQSX"
-};
+const auth = getAuth(app);
 
-export const app = initializeApp(firebaseConfig);
-export const db = getDatabase(app);
+function login() {
+
+  alert("Login button clicked");
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("Login Successful");
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      alert(error.code + "\n" + error.message);
+    });
+}
+
+window.login = login;
