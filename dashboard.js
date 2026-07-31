@@ -1,9 +1,9 @@
 import { db } from "./firebase.js";
 
 import {
-ref,
-onValue
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 const usersRef = ref(db,"users");
 const servicesRef = ref(db,"services");
