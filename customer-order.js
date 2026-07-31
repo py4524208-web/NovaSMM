@@ -163,3 +163,46 @@ msg.innerHTML = "✅ Order placed successfully.";
 }
 
 console.log("Customer Order Part 2 Loaded");
+// =======================
+// WALLET ENGINE
+// =======================
+
+import "./wallet-engine.js";
+
+// =======================
+// PLACE ORDER (UPDATED)
+// =======================
+
+const oldPlaceOrder = placeBtn.onclick;
+
+placeBtn.onclick = async () => {
+
+  const link = document.getElementById("orderLink").value.trim();
+  const qty = Number(document.getElementById("orderQuantity").value);
+  const msg = document.getElementById("msg");
+
+  msg.innerHTML = "";
+
+  if (!link || qty <= 0) {
+    msg.innerHTML = "Please enter link and quantity.";
+    return;
+  }
+
+  const total = (qty * Number(currentService.price)) / 1000;
+
+  // Wallet Check
+  const ok = await WalletEngine.deductBalance(
+    currentUser.uid,
+    total,
+    "Order : " + currentService.name
+  );
+
+  if (!ok) {
+    msg.innerHTML = "❌ Insufficient Wallet Balance";
+    return;
+  }
+
+  // Run old order code
+  await oldPlaceOrder();
+
+};
