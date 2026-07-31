@@ -85,7 +85,6 @@ devtoolsOpen = true;
 
 logSecurity("Developer Tools Opened");
 
-alert("Security Warning!");
 
 }
 
