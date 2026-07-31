@@ -8,17 +8,45 @@ import { auth } from "./firebase.js";
 
 const page = location.pathname.split("/").pop();
 
-// Already Logged In
+// =======================
+// AUTO REDIRECT
+// =======================
+
 onAuthStateChanged(auth, (user) => {
-  if (user && page === "customer-login.html") {
-    location.href = "customer-dashboard.html";
+
+  // Login page par ho aur pehle se login ho
+  if (
+    user &&
+    (page === "customer-login.html" || page === "")
+  ) {
+    location.replace("customer-dashboard.html");
+    return;
   }
+
+  // Protected pages
+  const protectedPages = [
+    "customer-dashboard.html",
+    "customer-services.html",
+    "customer-order.html",
+    "customer-orders.html",
+    "customer-wallet.html",
+    "customer-tickets.html"
+  ];
+
+  if (protectedPages.includes(page) && !user) {
+    location.replace("customer-login.html");
+  }
+
 });
 
-// Login
+// =======================
+// LOGIN
+// =======================
+
 const btn = document.getElementById("loginBtn");
 
 if (btn) {
+
   btn.onclick = async () => {
 
     const email = document.getElementById("email").value.trim();
@@ -28,53 +56,55 @@ if (btn) {
     msg.innerHTML = "";
 
     if (!email || !password) {
-      msg.innerHTML = "Please fill all fields";
+      msg.innerHTML = "Please fill all fields.";
       return;
     }
 
     try {
+
       await signInWithEmailAndPassword(auth, email, password);
-      location.href = "customer-dashboard.html";
+
+      location.replace("customer-dashboard.html");
+
     } catch (e) {
+
       msg.innerHTML = e.code;
+
     }
 
   };
+
 }
 
-// Logout
+// =======================
+// LOGOUT
+// =======================
+
 window.customerLogout = async function () {
 
   try {
 
     await signOut(auth);
 
-    location.href = "customer-login.html";
+    localStorage.removeItem("selectedService");
+
+    location.replace("customer-login.html");
 
   } catch (e) {
 
     console.error(e);
+
     alert(e.message);
 
   }
 
 };
 
-// Protect Customer Pages
-if (page !== "customer-login.html" && page !== "customer-register.html") {
+// =======================
+// ENTER KEY
+// =======================
 
-  onAuthStateChanged(auth, (user) => {
-
-    if (!user) {
-      location.href = "customer-login.html";
-    }
-
-  });
-
-}
-
-// Enter Key Login
-document.addEventListener("keydown", function (e) {
+document.addEventListener("keydown", (e) => {
 
   if (e.key === "Enter" && btn) {
     btn.click();
@@ -82,4 +112,4 @@ document.addEventListener("keydown", function (e) {
 
 });
 
-console.log("Customer Login Ready");
+console.log("Customer Auth Loaded");
