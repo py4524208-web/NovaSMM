@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NovaSMM - My Orders</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="customer-dashboard.html">🏠 Dashboard</a>
+
+<a href="customer-services.html">📦 Services</a>
+
+<a href="customer-orders.html" class="active">🛒 Orders</a>
+
+<a href="customer-wallet.html">💰 Wallet</a>
+
+<a href="customer-tickets.html">🎫 Tickets</a>
+
+<button id="logoutBtn">🚪 Logout</button>
+
+</div>
+
+<div class="main-content">
+
+<h1>🛒 My Orders</h1>
+
+<div class="card">
+
+<input
+type="text"
+id="searchOrder"
+placeholder="Search Order..."
+style="width:100%;padding:10px;margin-bottom:15px;">
+
+<table id="ordersTable">
+
+<tr>
+
+<th>Service</th>
+
+<th>Link</th>
+
+<th>Quantity</th>
+
+<th>Price</th>
+
+<th>Status</th>
+
+<th>Date</th>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module" src="customer-orders.js"></script>
+<script type="module" src="security.js"></script>
+
+</body>
+
+</html>
