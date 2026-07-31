@@ -178,3 +178,15 @@ window.showNotification = function(message){
 // ✔ Service Recommendations
 
 console.log("Customer Dashboard Part 2 Loaded");
+
+import { signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+import { auth } from "./firebase.js";
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    location.href = "customer-login.html";
+  });
+}
