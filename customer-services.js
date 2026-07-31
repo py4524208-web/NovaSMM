@@ -1,29 +1,29 @@
 import { auth, db } from "./firebase.js";
 
 import {
-onAuthStateChanged
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
-ref,
-onValue
+  ref,
+  onValue
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
+let currentUser = null;
+
 // =======================
-// LOGIN CHECK
+// AUTH CHECK
 // =======================
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth, (user) => {
 
-if(!user){
+  if (!user) {
+    window.location.replace("customer-login.html");
+    return;
+  }
 
-location.href="customer-login.html";
-
-return;
-
-}
-
-loadServices();
+  currentUser = user;
+  loadServices();
 
 });
 
@@ -31,15 +31,17 @@ loadServices();
 // LOAD SERVICES
 // =======================
 
-function loadServices(){
+function loadServices() {
 
-const table=document.getElementById("servicesTable");
+  const table = document.getElementById("servicesTable");
 
-const servicesRef=ref(db,"services");
+  if (!table) return;
 
-onValue(servicesRef,(snapshot)=>{
+  const servicesRef = ref(db, "services");
 
-table.innerHTML=`
+  onValue(servicesRef, (snapshot) => {
+
+    table.innerHTML = `
 <tr>
 <th>Category</th>
 <th>Service</th>
@@ -50,24 +52,26 @@ table.innerHTML=`
 </tr>
 `;
 
-if(snapshot.exists()){
+    if (!snapshot.exists()) return;
 
-snapshot.forEach((child)=>{
+    snapshot.forEach((child) => {
 
-const s=child.val();
+      const s = child.val();
 
-table.innerHTML+=`
+      if (s.status !== "Active") return;
+
+      table.innerHTML += `
 <tr>
 
-<td>${s.category||"-"}</td>
+<td>${s.category || "-"}</td>
 
-<td>${s.name||"-"}</td>
+<td>${s.name || "-"}</td>
 
-<td>₹${s.price||0}</td>
+<td>₹${s.price || 0}</td>
 
-<td>${s.min||0}</td>
+<td>${s.min || 0}</td>
 
-<td>${s.max||0}</td>
+<td>${s.max || 0}</td>
 
 <td>
 
@@ -82,15 +86,13 @@ Order
 </tr>
 `;
 
-});
+    });
+
+  });
 
 }
 
-});
-
-}
-
-console.log("Customer Services Part 1 Loaded");
+console.log("Customer Services Loaded");
 // =======================
 // SEARCH SERVICES
 // =======================
@@ -125,9 +127,16 @@ if (searchBox) {
 
 window.orderService = function (serviceId) {
 
+  if (!currentUser) {
+
+    window.location.replace("customer-login.html");
+    return;
+
+  }
+
   localStorage.setItem("selectedService", serviceId);
 
-  location.href = "customer-order.html";
+  window.location.href = "customer-order.html";
 
 };
 
@@ -156,4 +165,4 @@ window.filterCategory = function (category) {
 
 };
 
-console.log("Customer Services Part 2 Loaded");
+console.log("Customer Services Ready");
