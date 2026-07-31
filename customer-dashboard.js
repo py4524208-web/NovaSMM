@@ -1,33 +1,31 @@
 import { auth, db } from "./firebase.js";
 
 import {
-onAuthStateChanged,
-signOut
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
-ref,
-get,
-onValue
+  ref,
+  get,
+  onValue
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 // =======================
 // AUTH CHECK
 // =======================
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth, async (user) => {
 
-if(!user){
+  if (!user) {
+    window.location.replace("customer-login.html");
+    return;
+  }
 
-location.href="customer-login.html";
-
-return;
-
-}
-
-loadCustomer(user.uid);
-
-loadOrders(user.uid);
+  loadCustomer(user.uid);
+  loadOrders(user.uid);
+  loadProfile(user.uid);
+  liveWallet(user.uid);
 
 });
 
@@ -35,15 +33,19 @@ loadOrders(user.uid);
 // LOAD CUSTOMER
 // =======================
 
-async function loadCustomer(uid){
+async function loadCustomer(uid) {
 
-const snap=await get(ref(db,"customers/"+uid));
+  const snap = await get(ref(db, "customers/" + uid));
 
-if(!snap.exists()) return;
+  if (!snap.exists()) return;
 
-const data=snap.val();
+  const data = snap.val();
 
-document.getElementById("walletBalance").innerHTML="₹"+(data.wallet||0);
+  const wallet = document.getElementById("walletBalance");
+
+  if (wallet) {
+    wallet.innerHTML = "₹" + (data.wallet || 0);
+  }
 
 }
 
@@ -51,15 +53,17 @@ document.getElementById("walletBalance").innerHTML="₹"+(data.wallet||0);
 // LOAD ORDERS
 // =======================
 
-function loadOrders(uid){
+function loadOrders(uid) {
 
-const ordersRef=ref(db,"customer_orders/"+uid);
+  const ordersRef = ref(db, "customer_orders/" + uid);
 
-onValue(ordersRef,(snapshot)=>{
+  onValue(ordersRef, (snapshot) => {
 
-const table=document.getElementById("recentOrders");
+    const table = document.getElementById("recentOrders");
 
-table.innerHTML=`
+    if (!table) return;
+
+    table.innerHTML = `
 <tr>
 <th>Service</th>
 <th>Link</th>
@@ -68,23 +72,22 @@ table.innerHTML=`
 </tr>
 `;
 
-let total=0;
-let pending=0;
-let completed=0;
+    let total = 0;
+    let pending = 0;
+    let completed = 0;
 
-if(snapshot.exists()){
+    if (snapshot.exists()) {
 
-snapshot.forEach((child)=>{
+      snapshot.forEach((child) => {
 
-const order=child.val();
+        const order = child.val();
 
-total++;
+        total++;
 
-if(order.status==="Pending") pending++;
+        if (order.status === "Pending") pending++;
+        if (order.status === "Completed") completed++;
 
-if(order.status==="Completed") completed++;
-
-table.innerHTML+=`
+        table.innerHTML += `
 <tr>
 <td>${order.service}</td>
 <td>${order.link}</td>
@@ -93,49 +96,46 @@ table.innerHTML+=`
 </tr>
 `;
 
-});
+      });
+
+    }
+
+    document.getElementById("totalOrders").innerHTML = total;
+    document.getElementById("pendingOrders").innerHTML = pending;
+    document.getElementById("completedOrders").innerHTML = completed;
+
+  });
 
 }
-
-document.getElementById("totalOrders").innerHTML=total;
-document.getElementById("pendingOrders").innerHTML=pending;
-document.getElementById("completedOrders").innerHTML=completed;
-
-});
-
-}
-
-console.log("Customer Dashboard Part 1 Loaded");
 // =======================
 // LOAD PROFILE
 // =======================
 
-async function loadProfile(uid){
+async function loadProfile(uid) {
 
-  const snap = await get(ref(db,"customers/"+uid));
+  const snap = await get(ref(db, "customers/" + uid));
 
-  if(!snap.exists()) return;
+  if (!snap.exists()) return;
 
   const data = snap.val();
 
-  document.title = "NovaSMM - " + data.name;
-
-  console.log("Customer:",data.name);
+  document.title = "NovaSMM - " + (data.name || "Customer");
 
 }
 
 // =======================
-// LIVE WALLET UPDATE
+// LIVE WALLET
 // =======================
 
-function liveWallet(uid){
+function liveWallet(uid) {
 
-  onValue(ref(db,"customers/"+uid+"/wallet"),(snap)=>{
+  onValue(ref(db, "customers/" + uid + "/wallet"), (snap) => {
 
-    if(snap.exists()){
+    const wallet = document.getElementById("walletBalance");
 
-      document.getElementById("walletBalance").innerHTML =
-      "₹" + snap.val();
+    if (wallet) {
+
+      wallet.innerHTML = "₹" + (snap.val() || 0);
 
     }
 
@@ -144,72 +144,43 @@ function liveWallet(uid){
 }
 
 // =======================
-// DASHBOARD INIT
-// =======================
-
-onAuthStateChanged(auth,(user)=>{
-
-  if(!user) return;
-
-  loadProfile(user.uid);
-
-  liveWallet(user.uid);
-
-});
-
-// =======================
 // NOTIFICATION
 // =======================
 
-window.showNotification = function(message){
+window.showNotification = function (message) {
 
   alert(message);
 
 };
 
 // =======================
-// FUTURE READY
+// LOGOUT
 // =======================
-
-// Upcoming:
-// ✔ Auto Order Tracking
-// ✔ Live Notifications
-// ✔ Wallet History
-// ✔ Recent Transactions
-// ✔ Service Recommendations
-
-console.log("Customer Dashboard Part 2 Loaded");
-
-import { signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { auth } from "./firebase.js";
 
 const logoutBtn = document.getElementById("logoutBtn");
 
 if (logoutBtn) {
+
   logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-    location.href = "customer-login.html";
+
+    try {
+
+      await signOut(auth);
+
+      localStorage.removeItem("selectedService");
+      sessionStorage.clear();
+
+      window.location.replace("customer-login.html");
+
+    } catch (e) {
+
+      console.error(e);
+      alert("Logout Failed : " + e.message);
+
+    }
+
   });
+
 }
-// =======================
-// LOGOUT
-// =======================
 
-window.customerLogout = async function () {
-
-  try {
-
-    await signOut(auth);
-
-    localStorage.removeItem("selectedService");
-
-    window.location.replace("customer-login.html");
-
-  } catch (e) {
-
-    console.error(e);
-    alert(e.message);
-
-  }
-
-};
+console.log("Customer Dashboard Loaded");
