@@ -1,7 +1,8 @@
 import { auth, db } from "./firebase.js";
 
 import {
-onAuthStateChanged
+onAuthStateChanged,
+signOut
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
@@ -190,3 +191,25 @@ if (logoutBtn) {
     location.href = "customer-login.html";
   });
 }
+// =======================
+// LOGOUT
+// =======================
+
+window.customerLogout = async function () {
+
+  try {
+
+    await signOut(auth);
+
+    localStorage.removeItem("selectedService");
+
+    window.location.replace("customer-login.html");
+
+  } catch (e) {
+
+    console.error(e);
+    alert(e.message);
+
+  }
+
+};
