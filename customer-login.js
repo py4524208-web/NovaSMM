@@ -1,6 +1,7 @@
 import {
-signInWithEmailAndPassword,
-onAuthStateChanged
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import { auth } from "./firebase.js";
@@ -9,112 +10,76 @@ const page = location.pathname.split("/").pop();
 
 // Already Logged In
 onAuthStateChanged(auth, (user) => {
-
-if(user){
-
-location.href="customer-dashboard.html";
-
-}
-
+  if (user && page === "customer-login.html") {
+    location.href = "customer-dashboard.html";
+  }
 });
 
 // Login
+const btn = document.getElementById("loginBtn");
 
-const btn=document.getElementById("loginBtn");
+if (btn) {
+  btn.onclick = async () => {
 
-if(btn){
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
 
-btn.onclick=async()=>{
+    msg.innerHTML = "";
 
-const email=document.getElementById("email").value.trim();
+    if (!email || !password) {
+      msg.innerHTML = "Please fill all fields";
+      return;
+    }
 
-const password=document.getElementById("password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      location.href = "customer-dashboard.html";
+    } catch (e) {
+      msg.innerHTML = e.code;
+    }
 
-const msg=document.getElementById("msg");
-
-msg.innerHTML="";
-
-if(!email||!password){
-
-msg.innerHTML="Please fill all fields";
-
-return;
-
+  };
 }
 
-try{
-
-await signInWithEmailAndPassword(auth,email,password);
-
-location.href="customer-dashboard.html";
-
-}catch(e){
-
-msg.innerHTML=e.code;
-
-}
-
-};
-
-}
-
-console.log("Customer Login Ready");
-// =======================
-// LOGOUT
-// =======================
-
+// Logout
 window.customerLogout = async function () {
 
   try {
 
-    await auth.signOut();
+    await signOut(auth);
 
     location.href = "customer-login.html";
 
   } catch (e) {
 
-    console.log(e);
+    console.error(e);
+    alert(e.message);
 
   }
 
 };
 
-// =======================
-// PROTECT CUSTOMER PAGES
-// =======================
-
-if (page === "customer-dashboard.html") {
+// Protect Customer Pages
+if (page !== "customer-login.html" && page !== "customer-register.html") {
 
   onAuthStateChanged(auth, (user) => {
 
     if (!user) {
-
       location.href = "customer-login.html";
-
     }
 
   });
 
 }
 
-// =======================
-// ENTER KEY LOGIN
-// =======================
+// Enter Key Login
+document.addEventListener("keydown", function (e) {
 
-document.addEventListener("keydown", function(e){
-
-  if(e.key==="Enter"){
-
-    const btn=document.getElementById("loginBtn");
-
-    if(btn){
-
-      btn.click();
-
-    }
-
+  if (e.key === "Enter" && btn) {
+    btn.click();
   }
 
 });
 
-console.log("Customer Login Part 2 Loaded");
+console.log("Customer Login Ready");
