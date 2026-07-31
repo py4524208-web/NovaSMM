@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NovaSMM - Tickets</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🚀 NovaSMM</h2>
+
+<a href="customer-dashboard.html">🏠 Dashboard</a>
+<a href="customer-services.html">📦 Services</a>
+<a href="customer-orders.html">🛒 Orders</a>
+<a href="customer-wallet.html">💰 Wallet</a>
+<a href="customer-tickets.html" class="active">🎫 Tickets</a>
+
+<button id="logoutBtn">🚪 Logout</button>
+
+</div>
+
+<div class="main-content">
+
+<h1>🎫 Support Tickets</h1>
+
+<div class="card">
+
+<input type="text" id="subject" placeholder="Subject">
+
+<textarea id="message" placeholder="Describe your issue"></textarea>
+
+<br><br>
+
+<button id="sendTicketBtn">Submit Ticket</button>
+
+<p id="msg"></p>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>My Tickets</h2>
+
+<table id="ticketTable">
+
+<tr>
+
+<th>Subject</th>
+
+<th>Message</th>
+
+<th>Status</th>
+
+<th>Date</th>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module" src="customer-tickets.js"></script>
+<script type="module" src="security.js"></script>
+
+</body>
+</html>
