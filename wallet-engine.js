@@ -125,3 +125,69 @@ return true;
 };
 
 console.log("Wallet Engine Part 2 Loaded");
+// =======================
+// WALLET HISTORY
+// =======================
+
+WalletEngine.getTransactions = async function(uid){
+
+const snap = await get(ref(db,"wallet_transactions/"+uid));
+
+if(!snap.exists()) return [];
+
+const list=[];
+
+snap.forEach((child)=>{
+
+list.unshift({
+
+id:child.key,
+
+...child.val()
+
+});
+
+});
+
+return list;
+
+};
+
+// =======================
+// LIVE BALANCE
+// =======================
+
+WalletEngine.liveBalance=function(uid,callback){
+
+import("https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js")
+.then(({onValue})=>{
+
+onValue(ref(db,"customers/"+uid+"/wallet"),(snap)=>{
+
+callback(Number(snap.val()||0));
+
+});
+
+});
+
+};
+
+// =======================
+// TRANSFER
+// =======================
+
+WalletEngine.transfer=async function(fromUid,toUid,amount){
+
+amount=Number(amount);
+
+const ok=await this.deductBalance(fromUid,amount,"Transfer");
+
+if(!ok) return false;
+
+await this.addBalance(toUid,amount,"Received");
+
+return true;
+
+};
+
+console.log("Wallet Engine Ready");
